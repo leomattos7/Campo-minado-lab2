@@ -43,10 +43,10 @@ static void revelaCelulas(int linha, int coluna, Tabuleiro** tabuleiro, int qtdC
 
 	tabuleiro[linha][coluna].revelado = 1;
 
-	revelaCelulas(linha - 1, coluna, tabuleiro, qtdCelulas); // Acima
-	revelaCelulas(linha + 1, coluna, tabuleiro, qtdCelulas); // Abaixo
-	revelaCelulas(linha, coluna - 1, tabuleiro, qtdCelulas); // Esquerda
-	revelaCelulas(linha, coluna + 1, tabuleiro, qtdCelulas); // Direita
+	revelaCelulas(linha - 1, coluna, tabuleiro, qtdCelulas); 
+	revelaCelulas(linha + 1, coluna, tabuleiro, qtdCelulas); 
+	revelaCelulas(linha, coluna - 1, tabuleiro, qtdCelulas); 
+	revelaCelulas(linha, coluna + 1, tabuleiro, qtdCelulas); 
 }
 
 void mouseClickLeft(int posX, int posY, int qtdCelulas, Tabuleiro** campo)
