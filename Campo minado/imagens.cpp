@@ -16,13 +16,6 @@ void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image)
 	SDL_RenderCopy(renderer, image, NULL, &dstRect);
 }
 
-void setImgFree(int x1, int x2, int y1, int y2,
-                SDL_Renderer* renderer, SDL_Texture* image)
-{
-	SDL_Rect dstRect = { x1, y1, x2, y2 };
-	SDL_RenderCopy(renderer, image, NULL, &dstRect);
-}
-
 void loadImage(int x, int y, int sizeX, int sizeY,
                SDL_Renderer* renderer, SDL_Texture* image)
 {
