@@ -1,6 +1,6 @@
 #include "game.h"
 
-static int mouseCellIntersection(int posX, int posY, int qtdCelulas)
+static int pertence(int posX, int posY, int qtdCelulas)
 {
 	int xIni = POS_INI_X - (qtdCelulas * (CELL_SIZE / 2));
 	int xFim = POS_INI_X + (qtdCelulas * (CELL_SIZE / 2));
@@ -20,51 +20,66 @@ static void getPos(int posX, int posY, int qtdCelulas, int* linha, int* coluna, 
 			{
 				*linha = i;
 				*coluna = j;
+				campo[i][j].selected = 1;
 				return;
 			}
 }
 
-static void revealCells(int line, int column, Board** board, int numberOfCells)
+static void revelaCelulas(int linha, int coluna, Board** tabuleiro, int qtdCelulas)
 {
-	if (line < 0 || line >= numberOfCells || column < 0 || column >= numberOfCells ||
-		board[line][column].isOpen || board[line][column].isFlag)
+	if (linha < 0 || linha >= qtdCelulas || coluna < 0 || coluna >= qtdCelulas ||
+		tabuleiro[linha][coluna].isOpen || tabuleiro[linha][coluna].isFlag)
 		return;
 
-	else if (board[line][column].isBomb)
+	else if (tabuleiro[linha][coluna].isBomb)
 		return;
 	
-	else if (board[line][column].neighborBombCount > 0)
+	else if (tabuleiro[linha][coluna].nearbyBombs > 0)
 	{
-		board[line][column].isOpen = 1;
+		tabuleiro[linha][coluna].isOpen = 1;
 		return;
 	}
 
-	board[line][column].isOpen = 1;
+	tabuleiro[linha][coluna].isOpen = 1;
 
-	revealCells(line - 1, column, board, numberOfCells); 
-	revealCells(line + 1, column, board, numberOfCells); 
-	revealCells(line, column - 1, board, numberOfCells); 
-	revealCells(line, column + 1, board, numberOfCells); 
+	revelaCelulas(linha - 1, coluna, tabuleiro, qtdCelulas); 
+	revelaCelulas(linha + 1, coluna, tabuleiro, qtdCelulas); 
+	revelaCelulas(linha, coluna - 1, tabuleiro, qtdCelulas); 
+	revelaCelulas(linha, coluna + 1, tabuleiro, qtdCelulas); 
 }
 
-void mouseClick(int posX, int posY, int numberOfCells, Board** board, Uint8 button)
+static void revealBombs(int numOfCells, Board** board)
 {
-	int line, column;
-	if (mouseCellIntersection)
+	for (int i = 0; i < numOfCells; i++)
+		for (int j = 0; j < numOfCells; j++)
+			if (board[i][j].isBomb)
+				board[i][j].isOpen = 1;
+}
+
+void mouseClick(int posX, int posY, int qtdCelulas, Board** campo, Uint8 button)
+{
+	int linha, coluna;
+	if (pertence)
 	{
-		getPos(posX, posY, numberOfCells, &line, &column, board);
-		if (!board[line][column].isOpen)
+		getPos(posX, posY, qtdCelulas, &linha, &coluna, campo);
+		if (!campo[linha][coluna].isOpen)
 		{
 			if (button == SDL_BUTTON_LEFT)
 			{
-				if (!board[line][column].isBomb)
-					revealCells(line, column, board, numberOfCells);
+				if (!campo[linha][coluna].isBomb)
+				{
+					revelaCelulas(linha, coluna, campo, qtdCelulas);
+					campo[linha][coluna].selected = 0;
+				}
 				else
-					board[line][column].isOpen = 1;
+				{
+					revealBombs(qtdCelulas, campo);
+				}
 			}
 			else if (button == SDL_BUTTON_RIGHT)
 			{
-				board[line][column].isFlag = ~board[line][column].isFlag;
+				campo[linha][coluna].isFlag = ~campo[linha][coluna].isFlag;
+				campo[linha][coluna].selected = 0;
 			}
 		}
 	}

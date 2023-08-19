@@ -15,20 +15,23 @@ typedef struct
 {
     int isBomb;
     int isFlag;
-    int neighborBombCount;
+    int nearbyBombs;
     int isOpen;
+    int selected;
+
+    int color;
 
     int posX;
     int posY;
 }Board;
 
-Board** memoryAlloc(int tamanho);
+Board** memoryAlloc(int size);
 
 void initBoard(Board** tabuleiro, int tamanho);
 
 void setBoard(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 
-void randomlyGenerateBombs(int qtdCelulas, Board** tabuleiro);
+void randomlyBombs(int qtdCelulas, Board** tabuleiro);
 
 void setNumbers(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 

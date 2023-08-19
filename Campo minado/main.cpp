@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 
     Board** board = memoryAlloc(numberOfCells);
     initBoard(board, numberOfCells);
-    randomlyGenerateBombs(numberOfCells, board);
+    randomlyBombs(numberOfCells, board);
 
     SDL_RenderClear(renderer);
     setBack(0, 0, renderer, textures.board);

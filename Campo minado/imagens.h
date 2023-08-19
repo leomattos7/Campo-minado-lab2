@@ -2,12 +2,14 @@
 #define IMAGENS_H
 
 #include <SDL.h>
+#include <stdio.h>
 
 typedef struct
 {
     SDL_Texture* board;
-    SDL_Texture* cell;
-    SDL_Texture* cell;
+    SDL_Texture* cell[2];
+    SDL_Texture* bomb;
+    SDL_Texture* redBomb;
     SDL_Texture* flag;
     SDL_Texture* openCell;
     SDL_Texture* score;
