@@ -24,7 +24,4 @@ void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image);
 void loadImage(int x, int y, int sizeX, int sizeY,
     SDL_Renderer* renderer, SDL_Texture* image);
 
-void loadTextures(SDL_Renderer* renderer, SDL_Texture*& tabuleiro, SDL_Texture*& celula, SDL_Texture*& bomba,
-    SDL_Texture*& bandeira, SDL_Texture*& celulaAberta, SDL_Texture*& score, SDL_Texture* numeros[5]);
-
 #endif 

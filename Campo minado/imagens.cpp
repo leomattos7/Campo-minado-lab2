@@ -37,19 +37,3 @@ void loadImage(int x, int y, int sizeX, int sizeY,
     SDL_Rect dstRect = { x, y, sizeX, sizeY };
     SDL_RenderCopy(renderer, image, NULL, &dstRect);
 }
-
-void loadTextures(SDL_Renderer* renderer, SDL_Texture*& tabuleiro, SDL_Texture*& celula, SDL_Texture*& bomba,
-    SDL_Texture*& bandeira, SDL_Texture*& celulaAberta, SDL_Texture*& score, SDL_Texture* numeros[5]) 
-{
-    tabuleiro = loadTexture(renderer, "tabuleiro.bmp");
-    celula = loadTexture(renderer, "cell.bmp");
-    bomba = loadTexture(renderer, "cell_bomba.bmp");
-    bandeira = loadTexture(renderer, "cell_flag.bmp");
-    celulaAberta = loadTexture(renderer, "cell_open.bmp");
-    score = loadTexture(renderer, "score.bmp");
-
-    numeros[1] = loadTexture(renderer, "one.bmp");
-    numeros[2] = loadTexture(renderer, "two.bmp");
-    numeros[3] = loadTexture(renderer, "three.bmp");
-    numeros[4] = loadTexture(renderer, "four.bmp");
-}

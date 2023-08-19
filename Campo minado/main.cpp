@@ -46,8 +46,8 @@ int main(int argc, char* argv[])
                     mouseClick(mousex, mousey, qtdCelulas, campo, SDL_BUTTON_RIGHT);
             }
         }
-        desenhaTabuleiro(qtdCelulas, renderer, textures, campo);
-        desenhaNumeros(qtdCelulas, renderer, textures, campo);
+        desenhaTabuleiro(qtdCelulas, renderer, &textures, campo);
+        desenhaNumeros(qtdCelulas, renderer, &textures, campo);
         SDL_RenderPresent(renderer);
     }
 

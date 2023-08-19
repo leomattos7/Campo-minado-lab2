@@ -26,10 +26,10 @@ Tabuleiro** alocaTabuleiro(int tamanho);
 
 void inicializaTabuleiro(Tabuleiro** tabuleiro, int tamanho);
 
-void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, const Textures& textures, Tabuleiro** tabuleiro);
+void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Tabuleiro** tabuleiro);
 
 void sorteiaBombas(int qtdCelulas, Tabuleiro** tabuleiro);
 
-void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, const Textures& textures, Tabuleiro** tabuleiro);
+void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Tabuleiro** tabuleiro);
 
 #endif 
