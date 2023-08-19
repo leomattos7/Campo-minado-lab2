@@ -28,13 +28,11 @@ static void revelaCelulas(int linha, int coluna, Tabuleiro** tabuleiro, int qtdC
 {
 	if (linha < 0 || linha >= qtdCelulas || coluna < 0 || coluna >= qtdCelulas ||
 		tabuleiro[linha][coluna].revelado || tabuleiro[linha][coluna].temBandeira)
-	{
 		return;
-	}
+
 	else if (tabuleiro[linha][coluna].temBomba)
-	{
 		return;
-	}
+	
 	else if (tabuleiro[linha][coluna].qtdBombasVizinhas > 0)
 	{
 		tabuleiro[linha][coluna].revelado = 1;
@@ -49,7 +47,7 @@ static void revelaCelulas(int linha, int coluna, Tabuleiro** tabuleiro, int qtdC
 	revelaCelulas(linha, coluna + 1, tabuleiro, qtdCelulas); 
 }
 
-void mouseClickLeft(int posX, int posY, int qtdCelulas, Tabuleiro** campo)
+void mouseClick(int posX, int posY, int qtdCelulas, Tabuleiro** campo, Uint8 button)
 {
 	int linha, coluna;
 	if (pertence)
@@ -57,21 +55,17 @@ void mouseClickLeft(int posX, int posY, int qtdCelulas, Tabuleiro** campo)
 		getPos(posX, posY, qtdCelulas, &linha, &coluna, campo);
 		if (!campo[linha][coluna].revelado)
 		{
-			if(!campo[linha][coluna].temBomba)
-				revelaCelulas(linha, coluna, campo, qtdCelulas);
-			else
-				campo[linha][coluna].revelado = 1;
+			if (button == SDL_BUTTON_LEFT)
+			{
+				if (!campo[linha][coluna].temBomba)
+					revelaCelulas(linha, coluna, campo, qtdCelulas);
+				else
+					campo[linha][coluna].revelado = 1;
+			}
+			else if (button == SDL_BUTTON_RIGHT)
+			{
+				campo[linha][coluna].temBandeira = !campo[linha][coluna].temBandeira;
+			}
 		}
-	}
-}
-
-void mouseClickRight(int posX, int posY, int qtdCelulas, Tabuleiro** campo)
-{
-	int linha, coluna;
-	if (pertence)
-	{
-		getPos(posX, posY, qtdCelulas, &linha, &coluna, campo);
-		if (!campo[linha][coluna].revelado)
-			campo[linha][coluna].temBandeira = !campo[linha][coluna].temBandeira;
 	}
 }

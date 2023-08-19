@@ -31,7 +31,6 @@ void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* celul
 
 void sorteiaBombas(int qtdCelulas, Tabuleiro** tabuleiro);
 
-void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* um,
-    SDL_Texture* dois, SDL_Texture* three, SDL_Texture* four, Tabuleiro** tabuleiro);
+void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* numeros[], Tabuleiro** tabuleiro);
 
 #endif 

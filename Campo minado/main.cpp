@@ -17,10 +17,11 @@ int main(int argc, char* argv[])
     SDL_Texture* bandeira = loadTexture(renderer, "cell_flag.bmp");
     SDL_Texture* celulaAberta = loadTexture(renderer, "cell_open.bmp");
     SDL_Texture* score = loadTexture(renderer, "score.bmp");
-    SDL_Texture* num1 = loadTexture(renderer, "one.bmp");
-    SDL_Texture* num2 = loadTexture(renderer, "two.bmp");
-    SDL_Texture* num3 = loadTexture(renderer, "three.bmp");
-    SDL_Texture* num4 = loadTexture(renderer, "four.bmp");
+    SDL_Texture* numeros[5];
+    numeros[1] = loadTexture(renderer, "one.bmp");
+    numeros[2] = loadTexture(renderer, "two.bmp");
+    numeros[3] = loadTexture(renderer, "three.bmp");
+    numeros[4] = loadTexture(renderer, "four.bmp");
 
     int qtdCelulas = 12;
 
@@ -47,14 +48,14 @@ int main(int argc, char* argv[])
             {
                 mousex = event.button.x;
                 mousey = event.button.y;
-                if(event.button.button == SDL_BUTTON_LEFT)
-					mouseClickLeft(mousex, mousey, qtdCelulas, campo);
-                if(event.button.button == SDL_BUTTON_RIGHT)
-                    mouseClickRight(mousex, mousey, qtdCelulas, campo);
+                if (event.button.button == SDL_BUTTON_LEFT)
+                    mouseClick(mousex, mousey, qtdCelulas, campo, SDL_BUTTON_LEFT);
+                else if (event.button.button == SDL_BUTTON_RIGHT)
+                    mouseClick(mousex, mousey, qtdCelulas, campo, SDL_BUTTON_RIGHT);
             }
         }
         desenhaTabuleiro(qtdCelulas, renderer, celula, bomba, celulaAberta, bandeira, campo);
-        desenhaNumeros(qtdCelulas, renderer, num1, num2, num3, num4, campo);
+        desenhaNumeros(qtdCelulas, renderer, numeros, campo);
         SDL_RenderPresent(renderer);
     }
 

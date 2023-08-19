@@ -78,50 +78,42 @@ void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* celul
 	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
 	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
 
-	for (int i = 0; i < qtdCelulas; i++) {
-		for (int j = 0; j < qtdCelulas; j++) {
-			if (tabuleiro[i][j].revelado == 0) {
-				if (tabuleiro[i][j].temBandeira == 1)
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, bandeira);
-				else
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, celula);
+	for (int i = 0; i < qtdCelulas; i++) 
+	{
+		for (int j = 0; j < qtdCelulas; j++) 
+		{
+			int posX = posIniX + (i * TAM_CELULA);
+			int posY = posIniY + (j * TAM_CELULA);
+
+			if (tabuleiro[i][j].revelado == 0) 
+			{
+				SDL_Texture* textura = tabuleiro[i][j].temBandeira ? bandeira : celula;
+				setBack(posX, posY, renderer, textura);
 			}
-			else if (tabuleiro[i][j].revelado == 1) {
-				if (tabuleiro[i][j].temBomba == 1)
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, bomba);
-				else
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, celulaAberta);
+			else if (tabuleiro[i][j].revelado == 1) 
+			{
+				SDL_Texture* textura = tabuleiro[i][j].temBomba ? bomba : celulaAberta;
+				setBack(posX, posY, renderer, textura);
 			}
 		}
 	}
 }
 
-void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* um,
-					SDL_Texture* dois, SDL_Texture* three, SDL_Texture* four, Tabuleiro** tabuleiro)
+void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* numeros[], Tabuleiro** tabuleiro)
 {
 	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
 	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
 
 	for (int i = 0; i < qtdCelulas; i++)
+	{
 		for (int j = 0; j < qtdCelulas; j++)
 		{
-			if (tabuleiro[i][j].revelado == 1 && tabuleiro[i][j].qtdBombasVizinhas != 0)
+			if (tabuleiro[i][j].revelado == 1 && tabuleiro[i][j].qtdBombasVizinhas != 0 && tabuleiro[i][j].qtdBombasVizinhas <= 4)
 			{
-				switch (tabuleiro[i][j].qtdBombasVizinhas)
-				{
-				case 1:
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, um);
-					break;
-				case 2:
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, dois);
-					break;
-				case 3:
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, three);
-					break;
-				case 4:
-					setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, four);
-					break;
-				}
+				
+				SDL_Texture* numeroTextura = numeros[tabuleiro[i][j].qtdBombasVizinhas];
+				setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, numeroTextura);
 			}
 		}
+	}
 }
