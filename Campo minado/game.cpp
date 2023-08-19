@@ -64,7 +64,7 @@ void mouseClick(int posX, int posY, int qtdCelulas, Tabuleiro** campo, Uint8 but
 			}
 			else if (button == SDL_BUTTON_RIGHT)
 			{
-				campo[linha][coluna].temBandeira = !campo[linha][coluna].temBandeira;
+				campo[linha][coluna].temBandeira = ~campo[linha][coluna].temBandeira;
 			}
 		}
 	}

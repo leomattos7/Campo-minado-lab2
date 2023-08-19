@@ -11,17 +11,9 @@ int main(int argc, char* argv[])
 
     SDL_Window* window = SDL_CreateWindow("Campo Minado by: Leonardo de Mattos", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    SDL_Texture* tabuleiro = loadTexture(renderer, "tabuleiro.bmp");
-    SDL_Texture* celula = loadTexture(renderer, "cell.bmp");
-    SDL_Texture* bomba = loadTexture(renderer, "cell_bomba.bmp");
-    SDL_Texture* bandeira = loadTexture(renderer, "cell_flag.bmp");
-    SDL_Texture* celulaAberta = loadTexture(renderer, "cell_open.bmp");
-    SDL_Texture* score = loadTexture(renderer, "score.bmp");
-    SDL_Texture* numeros[5];
-    numeros[1] = loadTexture(renderer, "one.bmp");
-    numeros[2] = loadTexture(renderer, "two.bmp");
-    numeros[3] = loadTexture(renderer, "three.bmp");
-    numeros[4] = loadTexture(renderer, "four.bmp");
+    
+    Textures textures;
+    loadTextures(renderer, textures);
 
     int qtdCelulas = 12;
 
@@ -30,7 +22,7 @@ int main(int argc, char* argv[])
     sorteiaBombas(qtdCelulas, campo);
 
     SDL_RenderClear(renderer);
-    setBack(0, 0, renderer, tabuleiro);
+    setBack(0, 0, renderer, textures.tabuleiro);
 
     int running = 1;
     int mousex = 0, mousey = 0;
@@ -54,12 +46,12 @@ int main(int argc, char* argv[])
                     mouseClick(mousex, mousey, qtdCelulas, campo, SDL_BUTTON_RIGHT);
             }
         }
-        desenhaTabuleiro(qtdCelulas, renderer, celula, bomba, celulaAberta, bandeira, campo);
-        desenhaNumeros(qtdCelulas, renderer, numeros, campo);
+        desenhaTabuleiro(qtdCelulas, renderer, textures, campo);
+        desenhaNumeros(qtdCelulas, renderer, textures, campo);
         SDL_RenderPresent(renderer);
     }
 
-    SDL_DestroyTexture(tabuleiro);
+    SDL_DestroyTexture(textures.tabuleiro);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

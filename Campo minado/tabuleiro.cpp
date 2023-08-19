@@ -72,34 +72,7 @@ void sorteiaBombas(int qtdCelulas, Tabuleiro** tabuleiro)
 	contaBombasVizinhas(qtdCelulas, tabuleiro);
 }
 
-void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* celula, SDL_Texture* bomba,
-					SDL_Texture* celulaAberta, SDL_Texture* bandeira, Tabuleiro** tabuleiro) 
-{
-	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
-	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
-
-	for (int i = 0; i < qtdCelulas; i++) 
-	{
-		for (int j = 0; j < qtdCelulas; j++) 
-		{
-			int posX = posIniX + (i * TAM_CELULA);
-			int posY = posIniY + (j * TAM_CELULA);
-
-			if (tabuleiro[i][j].revelado == 0) 
-			{
-				SDL_Texture* textura = tabuleiro[i][j].temBandeira ? bandeira : celula;
-				setBack(posX, posY, renderer, textura);
-			}
-			else if (tabuleiro[i][j].revelado == 1) 
-			{
-				SDL_Texture* textura = tabuleiro[i][j].temBomba ? bomba : celulaAberta;
-				setBack(posX, posY, renderer, textura);
-			}
-		}
-	}
-}
-
-void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* numeros[], Tabuleiro** tabuleiro)
+void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, const Textures& textures, Tabuleiro** tabuleiro)
 {
 	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
 	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
@@ -108,10 +81,37 @@ void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, SDL_Texture* numeros
 	{
 		for (int j = 0; j < qtdCelulas; j++)
 		{
-			if (tabuleiro[i][j].revelado == 1 && tabuleiro[i][j].qtdBombasVizinhas != 0 && tabuleiro[i][j].qtdBombasVizinhas <= 4)
+			int posX = posIniX + (i * TAM_CELULA);
+			int posY = posIniY + (j * TAM_CELULA);
+
+			SDL_Texture* textura = NULL;
+
+			if (tabuleiro[i][j].revelado == 0)
 			{
-				
-				SDL_Texture* numeroTextura = numeros[tabuleiro[i][j].qtdBombasVizinhas];
+				textura = tabuleiro[i][j].temBandeira ? textures.bandeira : textures.celula;
+			}
+			else if (tabuleiro[i][j].revelado == 1)
+			{
+				textura = tabuleiro[i][j].temBomba ? textures.bomba : textures.celulaAberta;
+			}
+
+			setBack(posX, posY, renderer, textura);
+		}
+	}
+}
+
+void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, const Textures& textures, Tabuleiro** tabuleiro)
+{
+	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
+	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
+
+	for (int i = 0; i < qtdCelulas; i++)
+	{
+		for (int j = 0; j < qtdCelulas; j++)
+		{
+			if (tabuleiro[i][j].revelado == 1 && tabuleiro[i][j].qtdBombasVizinhas >= 1 && tabuleiro[i][j].qtdBombasVizinhas <= 4)
+			{
+				SDL_Texture* numeroTextura = textures.numeros[tabuleiro[i][j].qtdBombasVizinhas];
 				setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, numeroTextura);
 			}
 		}
