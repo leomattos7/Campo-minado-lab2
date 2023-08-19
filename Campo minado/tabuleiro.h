@@ -9,27 +9,27 @@
 
 #define POS_INI_X 400
 #define POS_INI_Y 330
-#define TAM_CELULA 30
+#define CELL_SIZE 30
 
 typedef struct
 {
-    int temBomba;
-    int temBandeira;
-    int qtdBombasVizinhas;
-    int revelado;
+    int isBomb;
+    int isFlag;
+    int neighborBombCount;
+    int isOpen;
 
     int posX;
     int posY;
-}Tabuleiro;
+}Board;
 
-Tabuleiro** alocaTabuleiro(int tamanho);
+Board** memoryAlloc(int tamanho);
 
-void inicializaTabuleiro(Tabuleiro** tabuleiro, int tamanho);
+void initBoard(Board** tabuleiro, int tamanho);
 
-void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Tabuleiro** tabuleiro);
+void setBoard(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 
-void sorteiaBombas(int qtdCelulas, Tabuleiro** tabuleiro);
+void randomlyGenerateBombs(int qtdCelulas, Board** tabuleiro);
 
-void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Tabuleiro** tabuleiro);
+void setNumbers(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 
 #endif 

@@ -10,17 +10,17 @@ SDL_Texture* loadTexture(SDL_Renderer* renderer, const char* file)
 
 void loadTextures(SDL_Renderer* renderer, Textures& textures) 
 {
-    textures.tabuleiro = loadTexture(renderer, "tabuleiro.bmp");
-    textures.celula = loadTexture(renderer, "cell.bmp");
-    textures.bomba = loadTexture(renderer, "cell_bomba.bmp");
-    textures.bandeira = loadTexture(renderer, "cell_flag.bmp");
-    textures.celulaAberta = loadTexture(renderer, "cell_open.bmp");
+    textures.board = loadTexture(renderer, "tabuleiro.bmp");
+    textures.cell = loadTexture(renderer, "cell.bmp");
+    textures.cell = loadTexture(renderer, "cell_bomba.bmp");
+    textures.flag = loadTexture(renderer, "cell_flag.bmp");
+    textures.openCell = loadTexture(renderer, "cell_open.bmp");
     textures.score = loadTexture(renderer, "score.bmp");
 
-    textures.numeros[1] = loadTexture(renderer, "one.bmp");
-    textures.numeros[2] = loadTexture(renderer, "two.bmp");
-    textures.numeros[3] = loadTexture(renderer, "three.bmp");
-    textures.numeros[4] = loadTexture(renderer, "four.bmp");
+    textures.numbers[1] = loadTexture(renderer, "one.bmp");
+    textures.numbers[2] = loadTexture(renderer, "two.bmp");
+    textures.numbers[3] = loadTexture(renderer, "three.bmp");
+    textures.numbers[4] = loadTexture(renderer, "four.bmp");
 }
 
 void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image)

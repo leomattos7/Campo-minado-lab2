@@ -5,6 +5,6 @@
 #include "imagens.h"
 #include <math.h>
 
-void mouseClick(int posX, int posY, int qtdCelulas, Tabuleiro** campo, Uint8 button);
+void mouseClick(int posX, int posY, int qtdCelulas, Board** campo, Uint8 button);
 
 #endif

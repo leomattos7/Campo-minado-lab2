@@ -15,14 +15,14 @@ int main(int argc, char* argv[])
     Textures textures;
     loadTextures(renderer, textures);
 
-    int qtdCelulas = 12;
+    int numberOfCells = 12;
 
-    Tabuleiro** campo = alocaTabuleiro(qtdCelulas);
-    inicializaTabuleiro(campo, qtdCelulas);
-    sorteiaBombas(qtdCelulas, campo);
+    Board** board = memoryAlloc(numberOfCells);
+    initBoard(board, numberOfCells);
+    randomlyGenerateBombs(numberOfCells, board);
 
     SDL_RenderClear(renderer);
-    setBack(0, 0, renderer, textures.tabuleiro);
+    setBack(0, 0, renderer, textures.board);
 
     int running = 1;
     int mousex = 0, mousey = 0;
@@ -41,17 +41,17 @@ int main(int argc, char* argv[])
                 mousex = event.button.x;
                 mousey = event.button.y;
                 if (event.button.button == SDL_BUTTON_LEFT)
-                    mouseClick(mousex, mousey, qtdCelulas, campo, SDL_BUTTON_LEFT);
+                    mouseClick(mousex, mousey, numberOfCells, board, SDL_BUTTON_LEFT);
                 else if (event.button.button == SDL_BUTTON_RIGHT)
-                    mouseClick(mousex, mousey, qtdCelulas, campo, SDL_BUTTON_RIGHT);
+                    mouseClick(mousex, mousey, numberOfCells, board, SDL_BUTTON_RIGHT);
             }
         }
-        desenhaTabuleiro(qtdCelulas, renderer, &textures, campo);
-        desenhaNumeros(qtdCelulas, renderer, &textures, campo);
+        setBoard(numberOfCells, renderer, &textures, board);
+        setNumbers(numberOfCells, renderer, &textures, board);
         SDL_RenderPresent(renderer);
     }
 
-    SDL_DestroyTexture(textures.tabuleiro);
+    SDL_DestroyTexture(textures.board);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

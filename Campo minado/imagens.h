@@ -2,17 +2,16 @@
 #define IMAGENS_H
 
 #include <SDL.h>
-#include <stdio.h>
 
 typedef struct
 {
-    SDL_Texture* tabuleiro;
-    SDL_Texture* celula;
-    SDL_Texture* bomba;
-    SDL_Texture* bandeira;
-    SDL_Texture* celulaAberta;
+    SDL_Texture* board;
+    SDL_Texture* cell;
+    SDL_Texture* cell;
+    SDL_Texture* flag;
+    SDL_Texture* openCell;
     SDL_Texture* score;
-    SDL_Texture* numeros[5];
+    SDL_Texture* numbers[5];
 }Textures;
 
 void loadTextures(SDL_Renderer* renderer, Textures& textures);

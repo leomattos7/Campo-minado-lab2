@@ -1,98 +1,94 @@
 #include "tabuleiro.h"
 
 
-Tabuleiro** alocaTabuleiro(int tamanho)
+Board** memoryAlloc(int size)
 {
-	Tabuleiro** tabuleiro = (Tabuleiro**)malloc(tamanho * sizeof(Tabuleiro*));
-	for (int i = 0; i < tamanho; i++)
-		tabuleiro[i] = (Tabuleiro*)malloc(tamanho * sizeof(Tabuleiro));
+	Board** tabuleiro = (Board**)calloc(size, sizeof(Board*));
+	for (int i = 0; i < size; i++)
+		tabuleiro[i] = (Board*)calloc(size, sizeof(Board));
 
 	return tabuleiro;
 }
 
-void inicializaTabuleiro(Tabuleiro** tabuleiro, int tamanho)
+void initBoard(Board** board, int tamanho)
 {
-	int iniX = POS_INI_X - (tamanho * (TAM_CELULA / 2));
-	int iniY = POS_INI_Y - (tamanho * (TAM_CELULA / 2));
+	int iniX = POS_INI_X - (tamanho * (CELL_SIZE / 2));
+	int iniY = POS_INI_Y - (tamanho * (CELL_SIZE / 2));
 	for (int i = 0; i < tamanho; i++)
 		for (int j = 0; j < tamanho; j++)
 		{
-			tabuleiro[i][j].temBomba = 0;
-			tabuleiro[i][j].temBandeira = 0;
-			tabuleiro[i][j].qtdBombasVizinhas = 0;
-			tabuleiro[i][j].revelado = 0;
-			tabuleiro[i][j].posX = iniX + (i * TAM_CELULA);
-			tabuleiro[i][j].posY = iniY + (j * TAM_CELULA);
+			board[i][j].posX = iniX + (i * CELL_SIZE);
+			board[i][j].posY = iniY + (j * CELL_SIZE);
 		}
 }
 
-static void contarBombasVizinhas(int linha, int coluna, Tabuleiro** tabuleiro, int tamanho) 
+static void countNearbyBombs(int line, int column, Board** board, int size) 
 {
 	for (int i = -1; i <= 1; i++) 
 		for (int j = -1; j <= 1; j++) 
 		{
-			int novaLinha = linha + i;
-			int novaColuna = coluna + j;
+			int newLine = line + i;
+			int newColumn = column + j;
 
-			if (novaLinha >= 0 && novaLinha < tamanho && novaColuna >= 0 && novaColuna < tamanho) 
+			if (newLine >= 0 && newLine < size && newColumn >= 0 && newColumn < size) 
 			{
-				if (tabuleiro[novaLinha][novaColuna].temBomba) 
+				if (board[newLine][newColumn].isBomb) 
 				{
-					tabuleiro[linha][coluna].qtdBombasVizinhas++;
+					board[line][column].neighborBombCount++;
 				}
 			}
 		}
 }
 
-static void contaBombasVizinhas(int qtdCelulas, Tabuleiro** tabuleiro)
+static void countAdjacentBombs(int qtdCells, Board** board)
 {
-	for (int i = 0; i < qtdCelulas; i++)
-		for (int j = 0; j < qtdCelulas; j++)
+	for (int i = 0; i < qtdCells; i++)
+		for (int j = 0; j < qtdCells; j++)
 		{
-			if (tabuleiro[i][j].temBomba == 0)
-				contarBombasVizinhas(i, j, tabuleiro, qtdCelulas);
+			if (board[i][j].isBomb == 0)
+				countNearbyBombs(i, j, board, qtdCells);
 		}
 }
 
-void sorteiaBombas(int qtdCelulas, Tabuleiro** tabuleiro)
+void randomlyGenerateBombs(int numberOfCells, Board** board)
 {
 	srand(time(NULL));
-	int linha, coluna, i = 0;
-	int qtdBombas = qtdCelulas * qtdCelulas * 0.15;
-	while(i < qtdBombas)
+	int line, column, i = 0;
+	int numberOfBombs = numberOfCells * numberOfCells * 0.15;
+	while(i < numberOfBombs)
 	{
-		linha = rand() % qtdCelulas;
-		coluna = rand() % qtdCelulas;
-		if (tabuleiro[linha][coluna].temBomba == 0)
+		line = rand() % numberOfCells;
+		column = rand() % numberOfCells;
+		if (board[line][column].isBomb == 0)
 		{
-			tabuleiro[linha][coluna].temBomba = 1;
+			board[line][column].isBomb = 1;
 			i++;
 		}
 	}
-	contaBombasVizinhas(qtdCelulas, tabuleiro);
+	countAdjacentBombs(numberOfCells, board);
 }
 
-void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Tabuleiro** tabuleiro)
+void setBoard(int numberOfCells, SDL_Renderer* renderer, const Textures* textures, Board** board)
 {
-	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
-	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
+	int posIniX = POS_INI_X - (numberOfCells * (CELL_SIZE / 2));
+	int posIniY = POS_INI_Y - (numberOfCells * (CELL_SIZE / 2));
 
-	for (int i = 0; i < qtdCelulas; i++)
+	for (int i = 0; i < numberOfCells; i++)
 	{
-		for (int j = 0; j < qtdCelulas; j++)
+		for (int j = 0; j < numberOfCells; j++)
 		{
-			int posX = posIniX + (i * TAM_CELULA);
-			int posY = posIniY + (j * TAM_CELULA);
+			int posX = posIniX + (i * CELL_SIZE);
+			int posY = posIniY + (j * CELL_SIZE);
 
 			SDL_Texture* textura = NULL;
 
-			if (tabuleiro[i][j].revelado == 0)
+			if (board[i][j].isOpen == 0)
 			{
-				textura = tabuleiro[i][j].temBandeira ? textures->bandeira : textures->celula;
+				textura = board[i][j].isFlag ? textures->flag : textures->cell;
 			}
-			else if (tabuleiro[i][j].revelado == 1)
+			else if (board[i][j].isOpen == 1)
 			{
-				textura = tabuleiro[i][j].temBomba ? textures->bomba : textures->celulaAberta;
+				textura = board[i][j].isBomb ? textures->cell : textures->openCell;
 			}
 
 			setBack(posX, posY, renderer, textura);
@@ -100,19 +96,19 @@ void desenhaTabuleiro(int qtdCelulas, SDL_Renderer* renderer, const Textures* te
 	}
 }
 
-void desenhaNumeros(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Tabuleiro** tabuleiro)
+void setNumbers(int numberOfCells, SDL_Renderer* renderer, const Textures* textures, Board** board)
 {
-	int posIniX = POS_INI_X - (qtdCelulas * (TAM_CELULA / 2));
-	int posIniY = POS_INI_Y - (qtdCelulas * (TAM_CELULA / 2));
+	int posIniX = POS_INI_X - (numberOfCells * (CELL_SIZE / 2));
+	int posIniY = POS_INI_Y - (numberOfCells * (CELL_SIZE / 2));
 
-	for (int i = 0; i < qtdCelulas; i++)
+	for (int i = 0; i < numberOfCells; i++)
 	{
-		for (int j = 0; j < qtdCelulas; j++)
+		for (int j = 0; j < numberOfCells; j++)
 		{
-			if (tabuleiro[i][j].revelado == 1 && tabuleiro[i][j].qtdBombasVizinhas >= 1 && tabuleiro[i][j].qtdBombasVizinhas <= 4)
+			if (board[i][j].isOpen == 1 && board[i][j].neighborBombCount >= 1 && board[i][j].neighborBombCount <= 4)
 			{
-				SDL_Texture* numeroTextura = textures->numeros[tabuleiro[i][j].qtdBombasVizinhas];
-				setBack(posIniX + (i * TAM_CELULA), posIniY + (j * TAM_CELULA), renderer, numeroTextura);
+				SDL_Texture* numeroTextura = textures->numbers[board[i][j].neighborBombCount];
+				setBack(posIniX + (i * CELL_SIZE), posIniY + (j * CELL_SIZE), renderer, numeroTextura);
 			}
 		}
 	}
