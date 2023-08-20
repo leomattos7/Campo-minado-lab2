@@ -56,6 +56,14 @@ static void revealBombs(int numOfCells, Board** board)
 				board[i][j].isOpen = 1;
 }
 
+static int clickItem(int posX, int posY, int itemPosX, int itemPosY, Items items)
+{
+	if (posX >= itemPosX && posX <= itemPosX + 40 &&
+		posY >= itemPosY && posY <= itemPosY + 40)
+		return 1;
+	return 0;
+}
+
 void mouseClick(int posX, int posY, int qtdCelulas, Board** campo, Uint8 button)
 {
 	int linha, coluna;

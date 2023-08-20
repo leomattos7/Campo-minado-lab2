@@ -25,7 +25,17 @@ typedef struct
     int posY;
 }Board;
 
+typedef struct
+{
+    int plusPositionX;
+    int plusPositionY;
+}Items;
+
 Board** memoryAlloc(int size);
+
+void aditionalItemsPos(Items* items);
+
+void setAditionalItems(SDL_Renderer* renderer, Textures texture, Items items);
 
 void initBoard(Board** tabuleiro, int tamanho);
 

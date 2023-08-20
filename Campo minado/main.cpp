@@ -15,14 +15,19 @@ int main(int argc, char* argv[])
     Textures textures;
     loadTextures(renderer, textures);
 
-    int numberOfCells = 12;
+    Game game;
+    game.nOfCells = 12;
 
-    Board** board = memoryAlloc(numberOfCells);
-    initBoard(board, numberOfCells);
-    randomlyBombs(numberOfCells, board);
+    Items items;
+    aditionalItemsPos(&items);
+
+    Board** board = memoryAlloc(game.nOfCells);
+    initBoard(board, game.nOfCells);
+    randomlyBombs(game.nOfCells, board);
 
     SDL_RenderClear(renderer);
     setBack(0, 0, renderer, textures.board);
+    setAditionalItems(renderer, textures, items);
 
     int running = 1;
     int mousex = 0, mousey = 0;
@@ -41,13 +46,13 @@ int main(int argc, char* argv[])
                 mousex = event.button.x;
                 mousey = event.button.y;
                 if (event.button.button == SDL_BUTTON_LEFT)
-                    mouseClick(mousex, mousey, numberOfCells, board, SDL_BUTTON_LEFT);
+                    mouseClick(mousex, mousey, game.nOfCells, board, SDL_BUTTON_LEFT);
                 else if (event.button.button == SDL_BUTTON_RIGHT)
-                    mouseClick(mousex, mousey, numberOfCells, board, SDL_BUTTON_RIGHT);
+                    mouseClick(mousex, mousey, game.nOfCells, board, SDL_BUTTON_RIGHT);
             }
         }
-        setBoard(numberOfCells, renderer, &textures, board);
-        setNumbers(numberOfCells, renderer, &textures, board);
+        setBoard(game.nOfCells, renderer, &textures, board);
+        setNumbers(game.nOfCells, renderer, &textures, board);
         SDL_RenderPresent(renderer);
     }
 

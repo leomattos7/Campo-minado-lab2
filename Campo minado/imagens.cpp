@@ -23,6 +23,8 @@ void loadTextures(SDL_Renderer* renderer, Textures& textures)
     textures.numbers[2] = loadTexture(renderer, "two.bmp");
     textures.numbers[3] = loadTexture(renderer, "three.bmp");
     textures.numbers[4] = loadTexture(renderer, "four.bmp");
+
+    textures.plus = loadTexture(renderer, "plus.bmp");
 }
 
 void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image)

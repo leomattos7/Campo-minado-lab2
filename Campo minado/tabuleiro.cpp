@@ -3,9 +3,9 @@
 
 Board** memoryAlloc(int size)
 {
-	Board** tabuleiro = (Board**)calloc(size, sizeof(Board*));
+	Board** tabuleiro = (Board**)malloc(size * sizeof(Board*));
 	for (int i = 0; i < size; i++)
-		tabuleiro[i] = (Board*)calloc(size, sizeof(Board));
+		tabuleiro[i] = (Board*)malloc(size * sizeof(Board));
 
 	return tabuleiro;
 }
@@ -19,6 +19,11 @@ void initBoard(Board** board, int size)
 	{
 		for (int j = 0; j < size; j++)
 		{
+			board[i][j].isBomb = 0;
+			board[i][j].isOpen = 0;
+			board[i][j].isFlag = 0;
+			board[i][j].nearbyBombs = 0;
+			board[i][j].selected = 0;
 			if(color)
 				board[i][j].color = 1;
 			else
@@ -29,6 +34,7 @@ void initBoard(Board** board, int size)
 		}
 		color = ~color;
 	}
+
 }
 
 static void adjacentBombs(int line, int column, Board** board, int size) 
@@ -77,6 +83,18 @@ void randomlyBombs(int numbOfCells, Board** board)
 	nearbyBombs(numbOfCells, board);
 }
 
+
+void setAditionalItems(SDL_Renderer* renderer, Textures texture, Items items)
+{
+	setBack(items.plusPositionX, items.plusPositionY, renderer, texture.plus);
+}
+
+void aditionalItemsPos(Items* items)
+{
+	items->plusPositionX = 50;
+	items->plusPositionY = 30;
+}
+
 void setBoard(int numbOfCells, SDL_Renderer* renderer, const Textures* textures, Board** board)
 {
 	int posIniX = POS_INI_X - (numbOfCells * (CELL_SIZE / 2));
@@ -105,7 +123,6 @@ void setBoard(int numbOfCells, SDL_Renderer* renderer, const Textures* textures,
 				else
 					texture = textures->openCell;
 			}
-
 			setBack(posX, posY, renderer, texture);
 		}
 	}

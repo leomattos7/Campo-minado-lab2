@@ -14,6 +14,8 @@ typedef struct
     SDL_Texture* openCell;
     SDL_Texture* score;
     SDL_Texture* numbers[5];
+
+    SDL_Texture* plus;
 }Textures;
 
 void loadTextures(SDL_Renderer* renderer, Textures& textures);
