@@ -2,10 +2,9 @@
 #define TABULEIRO_H
 
 #include <SDL.h>
-#include <stdio.h>
 #include "imagens.h"
 #include <time.h>
-#include <stdlib.h>
+#include <iostream>
 
 #define POS_INI_X 400
 #define POS_INI_Y 330
@@ -32,6 +31,7 @@ typedef struct
 }Items;
 
 Board** memoryAlloc(int size);
+
 
 void aditionalItemsPos(Items* items);
 

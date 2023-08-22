@@ -95,9 +95,6 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 	}
 	else if (clickItem(posX, posY, item.plusPositionX, item.plusPositionY))
 	{
-		board = (Board**)realloc(board, sizeof(Board*) * (game->size + 1));
-		for (int i = 0; i < game->size; i++)
-			board[i] = (Board*)realloc(board[i], sizeof(Board) * (game->size + 1));
-		initBoard(board, game->size++);
+		game->realoca = 1;
 	}
 }

@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 
     Game game;
     game.size = 12;
+    game.realoca = 0;
 
     Items items;
     aditionalItemsPos(&items);
@@ -53,6 +54,14 @@ int main(int argc, char* argv[])
         setBoard(game.size, renderer, &textures, board);
         setNumbers(game.size, renderer, &textures, board);
         SDL_RenderPresent(renderer);
+        if (game.realoca == 1)
+        {
+			game.realoca = 0;
+            game.size++;
+            Board** newBoard = memoryAlloc(game.size);
+            initBoard(newBoard, game.size);
+            board = newBoard;
+		}
     }
 
     SDL_DestroyTexture(textures.board);

@@ -3,8 +3,7 @@
 
 #include "tabuleiro.h"
 #include "imagens.h"
-#include <math.h>
-#include <stdbool.h>
+#include <iostream>
 
 typedef struct
 {
@@ -12,12 +11,13 @@ typedef struct
 	bool gameOver;
 	
 	int size;
+	int realoca;
 	int nOfBombs;
 	int openCells;
 	int notOpenCells;
 
 }Game;
 
-void mouseClick(int posX, int posY, Game* game, Board** campo, Items item, Uint8 button);
+void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button);
 
 #endif

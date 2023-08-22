@@ -3,12 +3,13 @@
 
 Board** memoryAlloc(int size)
 {
-	Board** tabuleiro = (Board**)malloc(size * sizeof(Board*));
-	for (int i = 0; i < size; i++)
-		tabuleiro[i] = (Board*)malloc(size * sizeof(Board));
-
-	return tabuleiro;
+	Board** board = new Board * [size];
+	for (int i = 0; i < size; i++) {
+		board[i] = new Board[size];
+	}
+	return board;
 }
+
 
 void initBoard(Board** board, int size)
 {
@@ -32,7 +33,8 @@ void initBoard(Board** board, int size)
 			board[i][j].posY = iniY + (j * CELL_SIZE);
 			color = ~color;
 		}
-		color = ~color;
+		if (size % 2 == 0)
+			color = ~color;
 	}
 	randomlyBombs(size, board);
 }
