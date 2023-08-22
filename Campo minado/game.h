@@ -10,14 +10,14 @@ typedef struct
 {
 	bool restartGame;
 	bool gameOver;
+	
 	int size;
-	int nOfCells;
 	int nOfBombs;
 	int openCells;
 	int notOpenCells;
 
 }Game;
 
-void mouseClick(int posX, int posY, int qtdCelulas, Board** campo, Uint8 button);
+void mouseClick(int posX, int posY, Game* game, Board** campo, Items item, Uint8 button);
 
 #endif
