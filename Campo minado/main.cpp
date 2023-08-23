@@ -17,13 +17,13 @@ int main(int argc, char* argv[])
 
     Game game;
     game.size = 12;
-    game.realoca = 0;
+    game.reallocUp = 0;
 
     Items items;
     aditionalItemsPos(&items);
 
     Board** board = memoryAlloc(game.size);
-    initBoard(board, game.size);
+    initBoard(board, game.size, &game.gameStart);
 
     SDL_RenderClear(renderer);
     setBack(0, 0, renderer, textures.board);
@@ -51,15 +51,20 @@ int main(int argc, char* argv[])
                     mouseClick(mousex, mousey, &game, board, items, SDL_BUTTON_RIGHT);
             }
         }
+        if (game.gameStart == 1)
+        {
+            randomlyBombs(game.size, board);
+            game.gameStart = -1;
+        }
         setBoard(game.size, renderer, &textures, board);
         setNumbers(game.size, renderer, &textures, board);
         SDL_RenderPresent(renderer);
-        if (game.realoca == 1)
+        if (game.reallocUp == 1)
         {
-			game.realoca = 0;
+			game.reallocUp = 0;
             game.size++;
             Board** newBoard = memoryAlloc(game.size);
-            initBoard(newBoard, game.size);
+            initBoard(newBoard, game.size, &game.gameStart);
             board = newBoard;
 		}
     }

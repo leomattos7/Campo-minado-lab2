@@ -1,5 +1,34 @@
 #include "game.h"
 
+
+void initBoard(Board** board, int size, int* start)
+{
+	int iniX = POS_INI_X - (size * (CELL_SIZE / 2));
+	int iniY = POS_INI_Y - (size * (CELL_SIZE / 2));
+	int color = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			board[i][j].isBomb = 0;
+			board[i][j].isOpen = 0;
+			board[i][j].isFlag = 0;
+			board[i][j].nearbyBombs = 0;
+			board[i][j].selected = 0;
+			if (color)
+				board[i][j].color = 1;
+			else
+				board[i][j].color = 0;
+			board[i][j].posX = iniX + (i * CELL_SIZE);
+			board[i][j].posY = iniY + (j * CELL_SIZE);
+			color = ~color;
+		}
+		if (size % 2 == 0)
+			color = ~color;
+	}
+	*start = 0;
+}
+
 static int pertence(int posX, int posY, int qtdCelulas)
 {
 	int xIni = POS_INI_X - (qtdCelulas * (CELL_SIZE / 2));
@@ -80,6 +109,8 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 				{
 					revelaCelulas(linha, coluna, board, game->size);
 					board[linha][coluna].selected = 0;
+					if(game->gameStart == 0)
+						game->gameStart = 1;
 				}
 				else
 				{
@@ -95,6 +126,6 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 	}
 	else if (clickItem(posX, posY, item.plusPositionX, item.plusPositionY))
 	{
-		game->realoca = 1;
+		game->reallocUp = 1;
 	}
 }

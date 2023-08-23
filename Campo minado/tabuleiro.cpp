@@ -10,35 +10,6 @@ Board** memoryAlloc(int size)
 	return board;
 }
 
-
-void initBoard(Board** board, int size)
-{
-	int iniX = POS_INI_X - (size * (CELL_SIZE / 2));
-	int iniY = POS_INI_Y - (size * (CELL_SIZE / 2));
-	int color = 0;
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 0; j < size; j++)
-		{
-			board[i][j].isBomb = 0;
-			board[i][j].isOpen = 0;
-			board[i][j].isFlag = 0;
-			board[i][j].nearbyBombs = 0;
-			board[i][j].selected = 0;
-			if(color)
-				board[i][j].color = 1;
-			else
-				board[i][j].color = 0;
-			board[i][j].posX = iniX + (i * CELL_SIZE);
-			board[i][j].posY = iniY + (j * CELL_SIZE);
-			color = ~color;
-		}
-		if (size % 2 == 0)
-			color = ~color;
-	}
-	randomlyBombs(size, board);
-}
-
 static void adjacentBombs(int line, int column, Board** board, int size) 
 {
 	for (int i = -1; i <= 1; i++) 

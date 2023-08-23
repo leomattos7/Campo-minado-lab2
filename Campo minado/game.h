@@ -9,14 +9,17 @@ typedef struct
 {
 	bool restartGame;
 	bool gameOver;
-	
+	int gameStart;
+
 	int size;
-	int realoca;
+	int reallocUp;
 	int nOfBombs;
 	int openCells;
-	int notOpenCells;
+	
 
 }Game;
+
+void initBoard(Board** board, int size, int* start);
 
 void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button);
 
