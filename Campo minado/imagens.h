@@ -16,6 +16,9 @@ typedef struct
     SDL_Texture* numbers[5];
 
     SDL_Texture* plus;
+
+    SDL_Texture* player;
+    SDL_Texture* bot;
 }Textures;
 
 void loadTextures(SDL_Renderer* renderer, Textures& textures);

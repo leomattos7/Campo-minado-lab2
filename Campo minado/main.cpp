@@ -3,8 +3,6 @@
 #include "tabuleiro.h"
 #include "game.h"
 
-/*Adicionar tabuleiro.cpp, nesse arquivo: criar struct do tipo tabuleiro que recebe as informações da struct Tabuleiro e desenha ela na tela*/
-
 int main(int argc, char* argv[])
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -18,6 +16,7 @@ int main(int argc, char* argv[])
     Game game;
     game.size = 12;
     game.reallocUp = 0;
+    game.menu = 1;
 
     Items items;
     aditionalItemsPos(&items);

@@ -25,6 +25,9 @@ void loadTextures(SDL_Renderer* renderer, Textures& textures)
     textures.numbers[4] = loadTexture(renderer, "four.bmp");
 
     textures.plus = loadTexture(renderer, "plus.bmp");
+
+    textures.player = loadTexture(renderer, "player.bmp");
+    textures.bot = loadTexture(renderer, "bot.bmp");
 }
 
 void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image)

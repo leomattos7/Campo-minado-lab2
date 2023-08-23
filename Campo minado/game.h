@@ -16,7 +16,8 @@ typedef struct
 	int nOfBombs;
 	int openCells;
 	
-
+	int menu;
+	int gameMode;
 }Game;
 
 void initBoard(Board** board, int size, int* start);
