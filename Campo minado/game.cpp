@@ -107,10 +107,13 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 			{
 				if (!board[linha][coluna].isBomb)
 				{
+					if (game->gameStart == 0)
+					{
+						game->gameStart = 1;
+						randomlyBombs(game->size, board, linha, coluna);
+					}
 					revelaCelulas(linha, coluna, board, game->size);
 					board[linha][coluna].selected = 0;
-					if(game->gameStart == 0)
-						game->gameStart = 1;
 				}
 				else
 				{

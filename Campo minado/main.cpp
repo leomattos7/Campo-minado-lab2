@@ -51,11 +51,6 @@ int main(int argc, char* argv[])
                     mouseClick(mousex, mousey, &game, board, items, SDL_BUTTON_RIGHT);
             }
         }
-        if (game.gameStart == 1)
-        {
-            randomlyBombs(game.size, board);
-            game.gameStart = -1;
-        }
         setBoard(game.size, renderer, &textures, board);
         setNumbers(game.size, renderer, &textures, board);
         SDL_RenderPresent(renderer);

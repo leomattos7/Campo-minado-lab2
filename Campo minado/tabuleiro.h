@@ -39,7 +39,7 @@ void setAditionalItems(SDL_Renderer* renderer, Textures texture, Items items);
 
 void setBoard(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 
-void randomlyBombs(int qtdCelulas, Board** tabuleiro);
+void randomlyBombs(int qtdCelulas, Board** tabuleiro, int _linha, int _coluna);
 
 void setNumbers(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 

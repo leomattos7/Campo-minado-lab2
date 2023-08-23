@@ -38,7 +38,7 @@ static void nearbyBombs(int numbOfCells, Board** board)
 		}
 }
 
-void randomlyBombs(int numbOfCells, Board** board)
+void randomlyBombs(int numbOfCells, Board** board, int _linha, int _coluna)
 {
 	srand(time(NULL));
 	int line, column, i = 0;
@@ -47,7 +47,8 @@ void randomlyBombs(int numbOfCells, Board** board)
 	{
 		line = rand() % numbOfCells;
 		column = rand() % numbOfCells;
-		if (board[line][column].isBomb == 0)
+		if (board[line][column].isBomb == 0
+			&& line != _linha && column != _coluna)
 		{
 			board[line][column].isBomb = 1;
 			i++;
