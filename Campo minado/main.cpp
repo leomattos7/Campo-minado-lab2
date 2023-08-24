@@ -22,37 +22,30 @@ int main(int argc, char* argv[])
     Board** board = memoryAlloc(game.size);
     initBoard(board, game.size, &game.gameStart);
 
-    SDL_RenderClear(renderer);
-    setBack(0, 0, renderer, textures.board);
-    setAditionalItems(renderer, textures, items);
+    setInitialTextures(renderer, &textures, items);
 
     int running = 1;
     int mousex = 0, mousey = 0;
     SDL_Event event;
     
-    while (running)
+    while (game.running)
     {
         while (SDL_PollEvent(&event))
         {
             events(event, &game, board, items);
         }
 
-        if (game.reallocUp == 1)
+        if (game.reallocUp)
         {
-			game.reallocUp = 0;
-            game.size++;
-            Board** newBoard = memoryAlloc(game.size);
-            initBoard(newBoard, game.size, &game.gameStart);
-            board = newBoard;
+            deleteBoard(board, game.size);
+            reallocBoard(&game, &board);
+            setInitialTextures(renderer, &textures, items);
 		}
 
         update(&game, renderer, &textures, board);
     }
 
-    SDL_DestroyTexture(textures.board);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    dispose(&renderer, &window);
 
     return 0;
 }

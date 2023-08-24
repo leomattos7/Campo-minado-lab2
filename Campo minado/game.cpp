@@ -34,6 +34,7 @@ void initGame(Game* game)
 	game->size = 12;
 	game->reallocUp = 0;
 	game->menu = 1;
+	game->running = 1;
 	game->gameMode = 0;
 	game->restartGame = 0;
 	game->gameOver = 0;
@@ -46,7 +47,7 @@ void events(SDL_Event event, Game* game, Board** board, Items item)
 {
 	if (event.type == SDL_QUIT)
 	{
-		game->menu = 0;
+		game->running = 0;
 	}
 	else if (event.type == SDL_MOUSEBUTTONDOWN)
 	{
@@ -59,11 +60,46 @@ void events(SDL_Event event, Game* game, Board** board, Items item)
 	}
 }
 
+void dispose(SDL_Renderer** renderer, SDL_Window** window)
+{
+	SDL_DestroyRenderer(*renderer);
+	SDL_DestroyWindow(*window);
+	*renderer = NULL;
+	*window = NULL;
+	SDL_Quit();
+}
+
 void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** board)
 {
 	setBoard(game->size, renderer, textures, board);
 	setNumbers(game->size, renderer, textures, board);
 	SDL_RenderPresent(renderer);
+}
+
+void setInitialTextures(SDL_Renderer* renderer, Textures* textures, Items items)
+{
+	SDL_RenderClear(renderer);
+	setBack(0, 0, renderer, textures->board);
+	setAditionalItems(renderer, textures, items);
+}
+
+void deleteBoard(Board** board, int size)
+{
+	for (int i = 0; i < size; i++)
+		delete[] board[i];
+	delete[] board;
+}
+
+void reallocBoard(Game* game, Board*** board)
+{
+	game->reallocUp = 0;
+	if (game->size == 16)
+		game->size = 8;
+	else
+		game->size++;
+	Board** newBoard = memoryAlloc(game->size);
+	initBoard(newBoard, game->size, &game->gameStart);
+	*board = (Board**)newBoard;
 }
 
 static int pertence(int posX, int posY, int qtdCelulas)

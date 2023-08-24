@@ -35,7 +35,7 @@ Board** memoryAlloc(int size);
 
 void aditionalItemsPos(Items* items);
 
-void setAditionalItems(SDL_Renderer* renderer, Textures texture, Items items);
+void setAditionalItems(SDL_Renderer* renderer, Textures* texture, Items items);
 
 void setBoard(int qtdCelulas, SDL_Renderer* renderer, const Textures* textures, Board** tabuleiro);
 
