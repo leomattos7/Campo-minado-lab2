@@ -28,6 +28,9 @@ typedef struct
 {
     int plusPositionX;
     int plusPositionY;
+
+    int restartPositionX;
+    int restartPositionY;
 }Items;
 
 Board** memoryAlloc(int size);

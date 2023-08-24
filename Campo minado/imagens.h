@@ -18,6 +18,7 @@ typedef struct
     SDL_Texture* plus;
 
     SDL_Texture* player;
+    SDL_Texture* restart;
     SDL_Texture* bot;
 }Textures;
 

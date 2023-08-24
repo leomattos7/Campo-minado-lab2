@@ -61,12 +61,15 @@ void randomlyBombs(int numbOfCells, Board** board, int _linha, int _coluna)
 void setAditionalItems(SDL_Renderer* renderer, Textures* texture, Items items)
 {
 	setBack(items.plusPositionX, items.plusPositionY, renderer, texture->plus);
+	setBack(items.restartPositionX, items.restartPositionY, renderer, texture->restart);
 }
 
 void aditionalItemsPos(Items* items)
 {
 	items->plusPositionX = 50;
 	items->plusPositionY = 30;
+	items->restartPositionX = 385;
+	items->restartPositionY = 30;
 }
 
 void setBoard(int numbOfCells, SDL_Renderer* renderer, const Textures* textures, Board** board)

@@ -31,7 +31,8 @@ void initBoard(Board** board, int size, int* start)
 
 void initGame(Game* game)
 {
-	game->size = 12;
+	if(game->restartGame != 1)
+		game->size = 12;
 	game->reallocUp = 0;
 	game->menu = 1;
 	game->running = 1;
@@ -71,6 +72,12 @@ void dispose(SDL_Renderer** renderer, SDL_Window** window)
 
 void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** board)
 {
+	if (game->restartGame)
+	{
+		initGame(game);
+		initBoard(board, game->size, &game->gameStart);
+		game->restartGame = 0;
+	}
 	setBoard(game->size, renderer, textures, board);
 	setNumbers(game->size, renderer, textures, board);
 	SDL_RenderPresent(renderer);
@@ -171,7 +178,7 @@ static int clickItem(int posX, int posY, int itemPosX, int itemPosY)
 void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button)
 {
 	int linha, coluna;
-	if (pertence(posX, posY, game->size))
+	if (pertence(posX, posY, game->size) && game->gameOver == 0)
 	{
 		getPos(posX, posY, game->size, &linha, &coluna, board);
 		if (!board[linha][coluna].isOpen)
@@ -190,6 +197,7 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 				}
 				else
 				{
+					game->gameOver = 1;
 					revealBombs(game->size, board);
 				}
 			}
@@ -200,8 +208,12 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 			}
 		}
 	}
-	else if (clickItem(posX, posY, item.plusPositionX, item.plusPositionY))
+	else if (clickItem(posX, posY, item.plusPositionX, item.plusPositionY) && game->gameOver == 0)
 	{
 		game->reallocUp = 1;
+	}
+	else if (clickItem(posX, posY, item.restartPositionX, item.restartPositionY))
+	{
+		game->restartGame = 1;
 	}
 }

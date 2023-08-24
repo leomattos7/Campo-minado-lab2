@@ -28,6 +28,7 @@ void loadTextures(SDL_Renderer* renderer, Textures& textures)
 
     textures.player = loadTexture(renderer, "player.bmp");
     textures.bot = loadTexture(renderer, "bot.bmp");
+    textures.restart = loadTexture(renderer, "restart.bmp");
 }
 
 void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image)
