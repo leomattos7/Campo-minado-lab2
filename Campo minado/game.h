@@ -7,8 +7,8 @@
 
 typedef struct
 {
-	bool restartGame;
-	bool gameOver;
+	int restartGame;
+	int gameOver;
 	int gameStart;
 
 	int size;
@@ -19,6 +19,12 @@ typedef struct
 	int menu;
 	int gameMode;
 }Game;
+
+void initGame(Game* game);
+
+void events(SDL_Event event, Game* game, Board** board, Items item);
+
+void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** board);
 
 void initBoard(Board** board, int size, int* start);
 

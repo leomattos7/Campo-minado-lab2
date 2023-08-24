@@ -14,9 +14,7 @@ int main(int argc, char* argv[])
     loadTextures(renderer, textures);
 
     Game game;
-    game.size = 12;
-    game.reallocUp = 0;
-    game.menu = 1;
+    initGame(&game);
 
     Items items;
     aditionalItemsPos(&items);
@@ -36,23 +34,9 @@ int main(int argc, char* argv[])
     {
         while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_QUIT)
-            {
-                running = 0;
-            }
-            else if (event.type == SDL_MOUSEBUTTONDOWN)
-            {
-                mousex = event.button.x;
-                mousey = event.button.y;
-                if (event.button.button == SDL_BUTTON_LEFT)
-                    mouseClick(mousex, mousey, &game, board, items, SDL_BUTTON_LEFT);
-                else if (event.button.button == SDL_BUTTON_RIGHT)
-                    mouseClick(mousex, mousey, &game, board, items, SDL_BUTTON_RIGHT);
-            }
+            events(event, &game, board, items);
         }
-        setBoard(game.size, renderer, &textures, board);
-        setNumbers(game.size, renderer, &textures, board);
-        SDL_RenderPresent(renderer);
+
         if (game.reallocUp == 1)
         {
 			game.reallocUp = 0;
@@ -61,6 +45,8 @@ int main(int argc, char* argv[])
             initBoard(newBoard, game.size, &game.gameStart);
             board = newBoard;
 		}
+
+        update(&game, renderer, &textures, board);
     }
 
     SDL_DestroyTexture(textures.board);

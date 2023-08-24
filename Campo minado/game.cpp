@@ -29,6 +29,43 @@ void initBoard(Board** board, int size, int* start)
 	*start = 0;
 }
 
+void initGame(Game* game)
+{
+	game->size = 12;
+	game->reallocUp = 0;
+	game->menu = 1;
+	game->gameMode = 0;
+	game->restartGame = 0;
+	game->gameOver = 0;
+	game->gameStart = 0;
+	game->nOfBombs = 0;
+	game->openCells = 0;
+}
+
+void events(SDL_Event event, Game* game, Board** board, Items item)
+{
+	if (event.type == SDL_QUIT)
+	{
+		game->menu = 0;
+	}
+	else if (event.type == SDL_MOUSEBUTTONDOWN)
+	{
+		int mousex = event.button.x;
+		int mousey = event.button.y;
+		if (event.button.button == SDL_BUTTON_LEFT)
+			mouseClick(mousex, mousey, game, board, item, SDL_BUTTON_LEFT);
+		else if (event.button.button == SDL_BUTTON_RIGHT)
+			mouseClick(mousex, mousey, game, board, item, SDL_BUTTON_RIGHT);
+	}
+}
+
+void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** board)
+{
+	setBoard(game->size, renderer, textures, board);
+	setNumbers(game->size, renderer, textures, board);
+	SDL_RenderPresent(renderer);
+}
+
 static int pertence(int posX, int posY, int qtdCelulas)
 {
 	int xIni = POS_INI_X - (qtdCelulas * (CELL_SIZE / 2));
