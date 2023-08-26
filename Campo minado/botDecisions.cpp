@@ -1,8 +1,11 @@
 #include "botDecisions.h"
 
+// ainda falta fazer o jogo funcionar, mas isso está pronto, basta utilizar as funções de game.cpp
 static int calcProbability(Game* game, Bot bot)
 {
-
+	// decidir jogada inicial
+	// decidir entre celulas perto de celulas com bombas vizinhas e celulas sem bombas vizinhas
+	// decidir entre celulas centrais e das bordas
 }
 void readMatrix(Board** board, Game* game, Bot bot)
 {
