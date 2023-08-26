@@ -35,7 +35,6 @@ typedef struct
 
 Board** memoryAlloc(int size);
 
-
 void aditionalItemsPos(Items* items);
 
 void setAditionalItems(SDL_Renderer* renderer, Textures* texture, Items items);

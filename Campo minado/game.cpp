@@ -1,7 +1,7 @@
 #include "game.h"
 
 
-void initBoard(Board** board, int size, int* start)
+void initBoard(Board** board, int size)
 {
 	int iniX = POS_INI_X - (size * (CELL_SIZE / 2));
 	int iniY = POS_INI_Y - (size * (CELL_SIZE / 2));
@@ -26,7 +26,6 @@ void initBoard(Board** board, int size, int* start)
 		if (size % 2 == 0)
 			color = ~color;
 	}
-	*start = 0;
 }
 
 void initGame(Game* game)
@@ -75,7 +74,7 @@ void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** boar
 	if (game->restartGame)
 	{
 		initGame(game);
-		initBoard(board, game->size, &game->gameStart);
+		initBoard(board, game->size);
 		game->restartGame = 0;
 	}
 	setBoard(game->size, renderer, textures, board);
@@ -105,7 +104,7 @@ void reallocBoard(Game* game, Board*** board)
 	else
 		game->size++;
 	Board** newBoard = memoryAlloc(game->size);
-	initBoard(newBoard, game->size, &game->gameStart);
+	initBoard(newBoard, game->size);
 	*board = (Board**)newBoard;
 }
 

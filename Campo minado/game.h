@@ -36,7 +36,7 @@ void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** boar
 
 void dispose(SDL_Renderer** renderer, SDL_Window** window);
 
-void initBoard(Board** board, int size, int* start);
+void initBoard(Board** board, int size);
 
 void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button);
 

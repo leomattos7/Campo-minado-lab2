@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     aditionalItemsPos(&items);
 
     Board** board = memoryAlloc(game.size);
-    initBoard(board, game.size, &game.gameStart);
+    initBoard(board, game.size);
 
     setInitialTextures(renderer, &textures, items);
 
