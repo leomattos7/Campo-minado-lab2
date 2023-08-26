@@ -28,7 +28,7 @@ static void adjacentBombs(int line, int column, Board** board, int size)
 		}
 }
 
-static void nearbyBombs(int numbOfCells, Board** board)
+void nearbyBombs(int numbOfCells, Board** board)
 {
 	for (int i = 0; i < numbOfCells; i++)
 		for (int j = 0; j < numbOfCells; j++)
@@ -36,25 +36,6 @@ static void nearbyBombs(int numbOfCells, Board** board)
 			if (board[i][j].isBomb == 0)
 				adjacentBombs(i, j, board, numbOfCells);
 		}
-}
-
-void randomlyBombs(int numbOfCells, Board** board, int _linha, int _coluna)
-{
-	srand(time(NULL));
-	int line, column, i = 0;
-	int numbOfBombs = numbOfCells * numbOfCells * 0.15;
-	while(i < numbOfBombs)
-	{
-		line = rand() % numbOfCells;
-		column = rand() % numbOfCells;
-		if (board[line][column].isBomb == 0
-			&& line != _linha && column != _coluna)
-		{
-			board[line][column].isBomb = 1;
-			i++;
-		}
-	}
-	nearbyBombs(numbOfCells, board);
 }
 
 

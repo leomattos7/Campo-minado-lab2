@@ -157,6 +157,26 @@ static void revelaCelulas(int linha, int coluna, Board** tabuleiro, int qtdCelul
 	revelaCelulas(linha, coluna + 1, tabuleiro, qtdCelulas); 
 }
 
+
+static void randomlyBombs(int numbOfCells, Board** board, int _linha, int _coluna)
+{
+	srand(time(NULL));
+	int line, column, i = 0;
+	int numbOfBombs = numbOfCells * numbOfCells * 0.15;
+	while (i < numbOfBombs)
+	{
+		line = rand() % numbOfCells;
+		column = rand() % numbOfCells;
+		if (board[line][column].isBomb == 0
+			&& line != _linha && column != _coluna)
+		{
+			board[line][column].isBomb = 1;
+			i++;
+		}
+	}
+	nearbyBombs(numbOfCells, board);
+}
+
 static void revealBombs(int numOfCells, Board** board)
 {
 	for (int i = 0; i < numOfCells; i++)
