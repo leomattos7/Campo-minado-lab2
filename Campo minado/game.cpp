@@ -105,6 +105,7 @@ void reallocBoard(Game* game, Board*** board)
 		game->size++;
 	Board** newBoard = memoryAlloc(game->size);
 	initBoard(newBoard, game->size);
+	game->gameStart = 0;
 	*board = (Board**)newBoard;
 }
 

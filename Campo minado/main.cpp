@@ -24,15 +24,20 @@ int main(int argc, char* argv[])
 
     setInitialTextures(renderer, &textures, items);
 
-    int running = 1;
-    int mousex = 0, mousey = 0;
     SDL_Event event;
     
     while (game.running)
     {
-        while (SDL_PollEvent(&event))
+        if (game.gameMode == 0)
         {
-            events(event, &game, board, items);
+            while (SDL_PollEvent(&event))
+            {
+                events(event, &game, board, items);
+            }
+        }
+        else
+        {
+            //
         }
 
         if (game.reallocUp)

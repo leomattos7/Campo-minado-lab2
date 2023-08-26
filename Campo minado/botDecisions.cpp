@@ -1,6 +1,9 @@
 #include "botDecisions.h"
 
+static int calcProbability(Game* game, Bot bot)
+{
 
+}
 void readMatrix(Board** board, Game* game, Bot bot)
 {
 	int aux = 0;
