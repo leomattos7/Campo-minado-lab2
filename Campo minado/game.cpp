@@ -69,6 +69,52 @@ void dispose(SDL_Renderer** renderer, SDL_Window** window)
 	SDL_Quit();
 }
 
+static void searchBomb(Board** board, int size, int i, int j)
+{
+	int cont = 0, contAux = 0;
+	for (int linha = -1; linha < 2; linha++)
+	{
+		for (int coluna = -1; coluna < 2; coluna++)
+		{
+			if (i + linha >= 0 && i + linha < size && j + coluna >= 0 && j + coluna < size)
+			{
+				contAux++;
+				if (board[i + linha][j + coluna].isOpen == 1)
+					cont++;
+			}
+		}
+	}
+	if (cont == contAux - 1)
+	{
+		for (int linha = -1; linha < 2; linha++)
+		{
+			for (int coluna = -1; coluna < 2; coluna++)
+			{
+				if (i + linha >= 0 && i + linha < size && j + coluna >= 0 && j + coluna < size
+					&& board[i + linha][j + coluna].isOpen == 0)
+				{
+					board[i + linha][j + coluna].isFlag = 1;
+				}
+			}
+		}
+	}
+}
+
+
+static void searchPossibleBombs(Board** board, Game* game)
+{
+	for (int i = 0; i < game->size; i++)
+	{
+		for (int j = 0; j < game->size; j++)
+		{
+			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs == 1)
+			{
+				searchBomb(board, game->size, i, j);	
+			}
+		}
+	}
+}
+
 void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** board)
 {
 	if (game->restartGame)
@@ -77,6 +123,7 @@ void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** boar
 		initBoard(board, game->size);
 		game->restartGame = 0;
 	}
+	searchPossibleBombs(board, game);
 	setBoard(game->size, renderer, textures, board);
 	setNumbers(game->size, renderer, textures, board);
 	SDL_RenderPresent(renderer);
