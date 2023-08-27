@@ -84,7 +84,7 @@ static void searchBomb(Board** board, int size, int i, int j)
 			}
 		}
 	}
-	if (cont == contAux - 1)
+	if (cont == contAux - board[i][j].nearbyBombs)
 	{
 		for (int linha = -1; linha < 2; linha++)
 		{
@@ -107,7 +107,7 @@ static void searchPossibleBombs(Board** board, Game* game)
 	{
 		for (int j = 0; j < game->size; j++)
 		{
-			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs == 1)
+			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs > 0)
 			{
 				searchBomb(board, game->size, i, j);	
 			}
