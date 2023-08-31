@@ -69,47 +69,72 @@ void dispose(SDL_Renderer** renderer, SDL_Window** window)
 	SDL_Quit();
 }
 
-static void searchBomb(Board** board, int size, int i, int j)
+static int countClosedCells(Board** board, int size, int i, int j)
 {
-	int cont = 0, contAux = 0;
+	int closedCount = 0, newRow, newCol;
 	for (int linha = -1; linha < 2; linha++)
 	{
 		for (int coluna = -1; coluna < 2; coluna++)
 		{
-			if (i + linha >= 0 && i + linha < size && j + coluna >= 0 && j + coluna < size)
+			newRow = i + linha;
+			newCol = j + coluna;
+			if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size && board[newRow][newCol].isOpen == 0)
 			{
-				contAux++;
-				if (board[i + linha][j + coluna].isOpen == 1)
-					cont++;
+				closedCount++;
 			}
 		}
 	}
-	if (cont == contAux - board[i][j].nearbyBombs)
+	closedCount -= board[i][j].nearbyBombs;
+	return (closedCount);
+}
+
+static int searchFlag(Game* game, Board** board, int i, int j)
+{
+	int newRow, newCol;
+	int qtdFlags = 0;
+	for (int linha = -1; linha < 2; linha++)
 	{
-		for (int linha = -1; linha < 2; linha++)
+		for (int coluna = -1; coluna < 2; coluna++)
 		{
-			for (int coluna = -1; coluna < 2; coluna++)
+			newRow = i + linha;
+			newCol = j + coluna;
+			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isFlag == 1)
 			{
-				if (i + linha >= 0 && i + linha < size && j + coluna >= 0 && j + coluna < size
-					&& board[i + linha][j + coluna].isOpen == 0)
-				{
-					board[i + linha][j + coluna].isFlag = 1;
-				}
+				qtdFlags++;
+			}
+		}
+	}
+	return qtdFlags;
+}
+
+static void searchFreeCell(Game* game, Board** board, int i, int j)
+{
+	int newRow, newCol;
+	for (int linha = -1; linha < 2; linha++)
+	{
+		for (int coluna = -1; coluna < 2; coluna++)
+		{
+			newRow = i + linha;
+			newCol = j + coluna;
+
+			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isOpen == 0)
+			{
+				board[newRow][newCol].isOpen = 1;
 			}
 		}
 	}
 }
 
-
-static void searchPossibleBombs(Board** board, Game* game)
+static void playBot(Game* game, Board** board)
 {
 	for (int i = 0; i < game->size; i++)
 	{
 		for (int j = 0; j < game->size; j++)
 		{
-			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs > 0)
+			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs == countClosedCells(board, game->size, i, j))
 			{
-				searchBomb(board, game->size, i, j);	
+				if(searchFlag(game, board, i, j) == board[i][j].nearbyBombs)
+					searchFreeCell(game, board, i, j);
 			}
 		}
 	}
@@ -123,7 +148,6 @@ void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** boar
 		initBoard(board, game->size);
 		game->restartGame = 0;
 	}
-	searchPossibleBombs(board, game);
 	setBoard(game->size, renderer, textures, board);
 	setNumbers(game->size, renderer, textures, board);
 	SDL_RenderPresent(renderer);
@@ -283,4 +307,6 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 	{
 		game->restartGame = 1;
 	}
+	else
+		playBot(game, board);
 }
