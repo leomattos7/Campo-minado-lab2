@@ -1,6 +1,5 @@
 #include "game.h"
 
-
 void initBoard(Board** board, int size)
 {
 	int iniX = POS_INI_X - (size * (CELL_SIZE / 2));
@@ -80,12 +79,13 @@ static int countClosedCells(Board** board, int size, int i, int j)
 			newCol = j + coluna;
 			if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size && board[newRow][newCol].isOpen == 0)
 			{
-				closedCount++;
+				if(board[newRow][newCol].isFlag == 0)
+					closedCount++;
 			}
 		}
 	}
-	closedCount -= board[i][j].nearbyBombs;
-	return (closedCount);
+
+	return closedCount;
 }
 
 static int searchFlag(Game* game, Board** board, int i, int j)
@@ -98,12 +98,13 @@ static int searchFlag(Game* game, Board** board, int i, int j)
 		{
 			newRow = i + linha;
 			newCol = j + coluna;
-			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isFlag == 1)
+			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isFlag != 0)
 			{
 				qtdFlags++;
 			}
 		}
 	}
+	std::cout << i << " " << j << " " << qtdFlags << std::endl;
 	return qtdFlags;
 }
 
@@ -131,9 +132,10 @@ static void playBot(Game* game, Board** board)
 	{
 		for (int j = 0; j < game->size; j++)
 		{
-			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs == countClosedCells(board, game->size, i, j))
+			if (board[i][j].isOpen == 1)
 			{
-				if(searchFlag(game, board, i, j) == board[i][j].nearbyBombs)
+				int flagsAround = searchFlag(game, board, i, j);
+				if(flagsAround == board[i][j].nearbyBombs)
 					searchFreeCell(game, board, i, j);
 			}
 		}
