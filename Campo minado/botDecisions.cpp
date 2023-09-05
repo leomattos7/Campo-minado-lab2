@@ -1,5 +1,5 @@
 #include "botDecisions.h"
-
+/*
 static int countClosedCells(Board** board, int size, int i, int j)
 {
 	int closedCount = 0, newRow, newCol;
@@ -59,6 +59,23 @@ static void searchFreeCell(Game* game, Board** board, int i, int j)
 	}
 }
 
+
+static void playBot(Game* game, Board** board)
+{
+	for (int i = 0; i < game->size; i++)
+	{
+		for (int j = 0; j < game->size; j++)
+		{
+			if (board[i][j].isOpen == 1)
+			{
+				int flagsAround = searchFlag(game, board, i, j);
+				if (flagsAround == board[i][j].nearbyBombs)
+					searchFreeCell(game, board, i, j);
+			}
+		}
+	}
+}
+
 static int countClosedCells(Board** board, int size, int i, int j)
 {
 	int closedCount = 0, newRow, newCol;
@@ -110,4 +127,4 @@ static void searchPossibleBombs(Board** board, Game* game)
 		}
 	}
 }
-
+*/

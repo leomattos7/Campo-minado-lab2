@@ -42,6 +42,22 @@ void initGame(Game* game)
 	game->openCells = 0;
 }
 
+static void lookPsbleFree(Board** board, Game* game)
+{
+	int find = 0;
+	int newRow, newCol;
+	for (int i = 0; i < game->size; i++)
+	{
+		for (int j = 0; j < game->size; j++)
+		{
+			if (board[i][j].isOpen == 0)
+			{
+
+			}
+		}
+	}
+}
+
 void events(SDL_Event event, Game* game, Board** board, Items item)
 {
 	if (event.type == SDL_QUIT)
@@ -66,22 +82,6 @@ void dispose(SDL_Renderer** renderer, SDL_Window** window)
 	*renderer = NULL;
 	*window = NULL;
 	SDL_Quit();
-}
-
-static void playBot(Game* game, Board** board)
-{
-	for (int i = 0; i < game->size; i++)
-	{
-		for (int j = 0; j < game->size; j++)
-		{
-			if (board[i][j].isOpen == 1)
-			{
-				int flagsAround = searchFlag(game, board, i, j);
-				if(flagsAround == board[i][j].nearbyBombs)
-					searchFreeCell(game, board, i, j);
-			}
-		}
-	}
 }
 
 void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** board)
@@ -252,5 +252,5 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 		game->restartGame = 1;
 	}
 	else
-		playBot(game, board);
+		printf("Click fora do tabuleiro\n");
 }
