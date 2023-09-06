@@ -4,7 +4,11 @@
 #include "tabuleiro.h"
 #include "imagens.h"
 #include <SDL.h>
+#include <ctime>
 #include <iostream>
+#include <list>
+
+using namespace std;
 
 typedef struct
 {
@@ -21,6 +25,13 @@ typedef struct
 	int menu;
 	int gameMode;
 }Game;
+
+
+typedef struct
+{
+	int row;
+	int col;
+}CellBot;
 
 void initGame(Game* game);
 

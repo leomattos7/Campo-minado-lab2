@@ -42,20 +42,42 @@ void initGame(Game* game)
 	game->openCells = 0;
 }
 
+static void randomCell(list<CellBot>& cells, Board** board)
+{
+	if (cells.empty())
+	{
+		return;
+	}
+
+	srand(static_cast<unsigned>(time(nullptr)));
+
+	int randomIndex = rand() % cells.size();
+
+	auto it = cells.begin();
+	advance(it, randomIndex);
+
+	int row = it->row;
+	int col = it->col;
+
+	board[row][col].isOpen = 1;
+}
+
 static void lookPsbleFree(Board** board, Game* game)
 {
-	int find = 0;
 	int newRow, newCol;
+	list<CellBot> cells;
+
 	for (int i = 0; i < game->size; i++)
 	{
 		for (int j = 0; j < game->size; j++)
 		{
 			if (board[i][j].isOpen == 0)
 			{
-
+				cells.push_front({ i, j });
 			}
 		}
 	}
+	randomCell(cells, board);
 }
 
 void events(SDL_Event event, Game* game, Board** board, Items item)
@@ -252,5 +274,5 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 		game->restartGame = 1;
 	}
 	else
-		printf("Click fora do tabuleiro\n");
+		lookPsbleFree(board, game);
 }
