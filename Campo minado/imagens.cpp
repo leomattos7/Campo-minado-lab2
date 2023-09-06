@@ -10,25 +10,25 @@ SDL_Texture* loadTexture(SDL_Renderer* renderer, const char* file)
 
 void loadTextures(SDL_Renderer* renderer, Textures& textures) 
 {
-    textures.board = loadTexture(renderer, "tabuleiro.bmp");
-    textures.cell[0] = loadTexture(renderer, "cell_oGreen.bmp");
-    textures.cell[1] = loadTexture(renderer, "cell_oBlue.bmp");
-    textures.bomb = loadTexture(renderer, "cell_bomba.bmp");
-    textures.flag = loadTexture(renderer, "cell_flag.bmp");
-    textures.openCell = loadTexture(renderer, "cell_open.bmp");
-    textures.score = loadTexture(renderer, "score.bmp");
-    textures.redBomb = loadTexture(renderer, "cell_redBomb.bmp");
+    textures.board = loadTexture(renderer, "./resources/tabuleiro.bmp");
+    textures.cell[0] = loadTexture(renderer, "./resources/cell_oGreen.bmp");
+    textures.cell[1] = loadTexture(renderer, "./resources/cell_oBlue.bmp");
+    textures.bomb = loadTexture(renderer, "./resources/cell_bomba.bmp");
+    textures.flag = loadTexture(renderer, "./resources/cell_flag.bmp");
+    textures.openCell = loadTexture(renderer, "./resources/cell_open.bmp");
+    textures.score = loadTexture(renderer, "./resources/score.bmp");
+    textures.redBomb = loadTexture(renderer, "./resources/cell_redBomb.bmp");
 
-    textures.numbers[1] = loadTexture(renderer, "one.bmp");
-    textures.numbers[2] = loadTexture(renderer, "two.bmp");
-    textures.numbers[3] = loadTexture(renderer, "three.bmp");
-    textures.numbers[4] = loadTexture(renderer, "four.bmp");
+    textures.numbers[1] = loadTexture(renderer, "./resources/one.bmp");
+    textures.numbers[2] = loadTexture(renderer, "./resources/two.bmp");
+    textures.numbers[3] = loadTexture(renderer, "./resources/three.bmp");
+    textures.numbers[4] = loadTexture(renderer, "./resources/four.bmp");
 
-    textures.plus = loadTexture(renderer, "plus.bmp");
+    textures.plus = loadTexture(renderer, "./resources/plus.bmp");
 
-    textures.player = loadTexture(renderer, "player.bmp");
-    textures.bot = loadTexture(renderer, "bot.bmp");
-    textures.restart = loadTexture(renderer, "restart.bmp");
+    textures.player = loadTexture(renderer, "./resources/player.bmp");
+    textures.bot = loadTexture(renderer, "./resources/bot.bmp");
+    textures.restart = loadTexture(renderer, "./resources/restart.bmp");
 }
 
 void setBack(int x, int y, SDL_Renderer* renderer, SDL_Texture* image)

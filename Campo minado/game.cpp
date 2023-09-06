@@ -48,25 +48,17 @@ static void randomCell(list<CellBot>& cells, Board** board)
 	{
 		return;
 	}
-
 	srand(static_cast<unsigned>(time(nullptr)));
-
 	int randomIndex = rand() % cells.size();
-
 	auto it = cells.begin();
 	advance(it, randomIndex);
-
-	int row = it->row;
-	int col = it->col;
-
-	board[row][col].isOpen = 1;
+	board[it->row][it->col].isOpen = 1;
 }
 
 static void lookPsbleFree(Board** board, Game* game)
 {
 	int newRow, newCol;
 	list<CellBot> cells;
-
 	for (int i = 0; i < game->size; i++)
 	{
 		for (int j = 0; j < game->size; j++)
