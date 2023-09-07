@@ -51,4 +51,6 @@ void initBoard(Board** board, int size);
 
 void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button);
 
+void playCell(Board** board, Game* game, int row, int col, int button);
+
 #endif

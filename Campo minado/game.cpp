@@ -42,7 +42,7 @@ void initGame(Game* game)
 	game->openCells = 0;
 }
 
-static void randomCell(list<CellBot>& cells, Board** board)
+static void randomCell(list<CellBot>& cells, Board** board, Game* game)
 {
 	if (cells.empty())
 	{
@@ -52,10 +52,11 @@ static void randomCell(list<CellBot>& cells, Board** board)
 	int randomIndex = rand() % cells.size();
 	auto it = cells.begin();
 	advance(it, randomIndex);
-	board[it->row][it->col].isOpen = 1;
+	board[it->row][it->col].selected = 1;
+	playCell(board, game, it->row, it->col, 1);
 }
 
-static void lookPsbleFree(Board** board, Game* game)
+static void randomPlay(Board** board, Game* game)
 {
 	int newRow, newCol;
 	list<CellBot> cells;
@@ -69,7 +70,7 @@ static void lookPsbleFree(Board** board, Game* game)
 			}
 		}
 	}
-	randomCell(cells, board);
+	randomCell(cells, board, game);
 }
 
 void events(SDL_Event event, Game* game, Board** board, Items item)
@@ -224,37 +225,42 @@ static int clickItem(int posX, int posY, int itemPosX, int itemPosY)
 	return 0;
 }
 
+void playCell(Board** board, Game* game, int row, int col, int button)
+{
+	if (button == 1)
+	{
+		if (!board[row][col].isBomb)
+		{
+			if (game->gameStart == 0)
+			{
+				game->gameStart = 1;
+				randomlyBombs(game->size, board, row, col);
+			}
+			revelaCelulas(row, col, board, game->size);
+			board[row][col].selected = 0;
+		}
+		else
+		{
+			game->gameOver = 1;
+			revealBombs(game->size, board);
+		}
+	}
+	else if (button == 3)
+	{
+		board[row][col].isFlag = ~board[row][col].isFlag;
+		board[row][col].selected = 0;
+	}
+}
+
 void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button)
 {
-	int linha, coluna;
+	int row, col;
 	if (pertence(posX, posY, game->size) && game->gameOver == 0)
 	{
-		getPos(posX, posY, game->size, &linha, &coluna, board);
-		if (!board[linha][coluna].isOpen)
+		getPos(posX, posY, game->size, &row, &col, board);
+		if (!board[row][col].isOpen)
 		{
-			if (button == SDL_BUTTON_LEFT)
-			{
-				if (!board[linha][coluna].isBomb)
-				{
-					if (game->gameStart == 0)
-					{
-						game->gameStart = 1;
-						randomlyBombs(game->size, board, linha, coluna);
-					}
-					revelaCelulas(linha, coluna, board, game->size);
-					board[linha][coluna].selected = 0;
-				}
-				else
-				{
-					game->gameOver = 1;
-					revealBombs(game->size, board);
-				}
-			}
-			else if (button == SDL_BUTTON_RIGHT)
-			{
-				board[linha][coluna].isFlag = ~board[linha][coluna].isFlag;
-				board[linha][coluna].selected = 0;
-			}
+			playCell(board, game, row, col, button);
 		}
 	}
 	else if (clickItem(posX, posY, item.plusPositionX, item.plusPositionY) && game->gameOver == 0)
@@ -266,5 +272,5 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 		game->restartGame = 1;
 	}
 	else
-		lookPsbleFree(board, game);
+		randomPlay(board, game);
 }

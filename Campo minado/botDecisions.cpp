@@ -1,5 +1,10 @@
 #include "botDecisions.h"
 /*
+
+void botPlaying(Board** board, Game* game)
+{
+
+}
 static int countClosedCells(Board** board, int size, int i, int j)
 {
 	int closedCount = 0, newRow, newCol;
