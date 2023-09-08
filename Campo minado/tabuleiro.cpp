@@ -72,14 +72,14 @@ void setBoard(int numbOfCells, SDL_Renderer* renderer, const Textures* textures,
 				if(board[i][j].isFlag)
 					texture = textures->flag;
 				else
-					texture = board[i][j].color ? textures->cell[0] : textures->cell[1];
+					texture = textures->cell;
 			}
 			else if (board[i][j].isOpen == 1)
 			{
 				if(board[i][j].isBomb)
 					texture = board[i][j].selected ? textures->redBomb : textures->bomb;
 				else
-					texture = textures->openCell;
+					texture = board[i][j].selected ? textures->cellSelect : textures->openCell;
 			}
 			setBack(posX, posY, renderer, texture);
 		}

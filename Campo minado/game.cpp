@@ -4,7 +4,6 @@ void initBoard(Board** board, int size)
 {
 	int iniX = POS_INI_X - (size * (CELL_SIZE / 2));
 	int iniY = POS_INI_Y - (size * (CELL_SIZE / 2));
-	int color = 0;
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -14,16 +13,9 @@ void initBoard(Board** board, int size)
 			board[i][j].isFlag = 0;
 			board[i][j].nearbyBombs = 0;
 			board[i][j].selected = 0;
-			if (color)
-				board[i][j].color = 1;
-			else
-				board[i][j].color = 0;
 			board[i][j].posX = iniX + (i * CELL_SIZE);
 			board[i][j].posY = iniY + (j * CELL_SIZE);
-			color = ~color;
 		}
-		if (size % 2 == 0)
-			color = ~color;
 	}
 }
 
@@ -40,6 +32,74 @@ void initGame(Game* game)
 	game->gameStart = 0;
 	game->nOfBombs = 0;
 	game->openCells = 0;
+}
+
+
+static int searchFlag(Game* game, Board** board, int i, int j)
+{
+	int newRow, newCol;
+	int qtdFlags = 0;
+	for (int linha = -1; linha < 2; linha++)	
+	{
+		for (int coluna = -1; coluna < 2; coluna++)
+		{
+			newRow = i + linha;
+			newCol = j + coluna;
+			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isFlag != 0)
+			{
+				qtdFlags++;
+			}
+		}
+	}
+	std::cout << i << " " << j << " " << qtdFlags << std::endl;
+	return qtdFlags;
+}
+
+static int searchFreeCell(Game* game, Board** board, int i, int j)
+{
+	int newRow, newCol;
+	for (int linha = -1; linha < 2; linha++)
+	{
+		for (int coluna = -1; coluna < 2; coluna++)
+		{
+			newRow = i + linha;
+			newCol = j + coluna;
+
+			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isOpen == 0)
+			{
+				if (board[newRow][newCol].isFlag == 0)
+				{
+					playCell(board, game, newRow, newCol, 1);
+					board[newRow][newCol].selected = 1;
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+
+static int playBot(Game* game, Board** board)
+{
+	int play = 0;
+	for (int i = 0; i < game->size; i++)
+	{
+		for (int j = 0; j < game->size; j++)
+		{
+			if (board[i][j].isOpen == 1)
+			{
+				int flagsAround = searchFlag(game, board, i, j);
+				if (flagsAround == board[i][j].nearbyBombs)
+				{
+					play = searchFreeCell(game, board, i, j);
+				}
+			}
+			if (play == 1)
+				return 1;
+		}
+	}
+	return 0;
 }
 
 static void randomCell(list<CellBot>& cells, Board** board, Game* game)
@@ -64,13 +124,90 @@ static void randomPlay(Board** board, Game* game)
 	{
 		for (int j = 0; j < game->size; j++)
 		{
-			if (board[i][j].isOpen == 0)
+			if (board[i][j].isOpen == 0 && board[i][j].isFlag == 0)
 			{
 				cells.push_front({ i, j });
 			}
 		}
 	}
 	randomCell(cells, board, game);
+}
+
+
+static int countClosedCells(Board** board, int size, int i, int j)
+{
+	int closedCount = 0, newRow, newCol;
+	for (int linha = -1; linha < 2; linha++)
+	{
+		for (int coluna = -1; coluna < 2; coluna++)
+		{
+			newRow = i + linha;
+			newCol = j + coluna;
+			if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size && board[newRow][newCol].isOpen == 0)
+			{
+				if (board[newRow][newCol].isFlag == 0)
+					closedCount++;
+			}
+		}
+	}
+	return closedCount;
+}
+
+static void setFlag(Board** board, Game* game, int i, int j)
+{
+	int newRow, newCol;
+	for (int linha = -1; linha < 2; linha++)
+	{
+		for (int coluna = -1; coluna < 2; coluna++)
+		{
+			newRow = i + linha;
+			newCol = j + coluna;
+			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isOpen == 0)
+			{
+				if (board[newRow][newCol].isFlag == 0)
+				{
+					playCell(board, game, newRow, newCol, 3);
+					board[newRow][newCol].selected = 1;
+					return;
+				}
+			}
+		}
+	}
+}
+
+static int searchPossibleBombs(Board** board, Game* game)
+{
+	for (int i = 0; i < game->size; i++)
+	{
+		for (int j = 0; j < game->size; j++)
+		{
+			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs > 0)
+			{
+				if (board[i][j].nearbyBombs == countClosedCells(board, game->size, i, j))
+				{
+					setFlag(board, game, i, j);
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+static void playing(Board** board, Game* game)
+{
+	if (playBot(game, board))
+	{
+		return;
+	}
+	else if (searchPossibleBombs(board, game))
+	{
+		return;
+	}
+	else
+	{
+		randomPlay(board, game);
+	}
 }
 
 void events(SDL_Event event, Game* game, Board** board, Items item)
@@ -190,7 +327,7 @@ static void revelaCelulas(int linha, int coluna, Board** tabuleiro, int qtdCelul
 
 static void randomlyBombs(int numbOfCells, Board** board, int _linha, int _coluna)
 {
-	srand(time(NULL));
+	srand(static_cast<unsigned>(time(nullptr)));
 	int line, column, i = 0;
 	int numbOfBombs = numbOfCells * numbOfCells * 0.15;
 	while (i < numbOfBombs)
@@ -272,5 +409,8 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 		game->restartGame = 1;
 	}
 	else
-		randomPlay(board, game);
+	{
+		playing(board, game);
+		this_thread::sleep_for(chrono::milliseconds(1000));
+	}	
 }

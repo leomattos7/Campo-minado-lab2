@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <ctime>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include <list>
 
 using namespace std;
@@ -25,7 +27,6 @@ typedef struct
 	int menu;
 	int gameMode;
 }Game;
-
 
 typedef struct
 {

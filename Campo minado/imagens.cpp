@@ -11,8 +11,8 @@ SDL_Texture* loadTexture(SDL_Renderer* renderer, const char* file)
 void loadTextures(SDL_Renderer* renderer, Textures& textures) 
 {
     textures.board = loadTexture(renderer, "./resources/tabuleiro.bmp");
-    textures.cell[0] = loadTexture(renderer, "./resources/cell_oGreen.bmp");
-    textures.cell[1] = loadTexture(renderer, "./resources/cell_oBlue.bmp");
+    textures.cell = loadTexture(renderer, "./resources/cell.bmp");
+    textures.cellSelect = loadTexture(renderer, "./resources/cell_select.bmp");
     textures.bomb = loadTexture(renderer, "./resources/cell_bomba.bmp");
     textures.flag = loadTexture(renderer, "./resources/cell_flag.bmp");
     textures.openCell = loadTexture(renderer, "./resources/cell_open.bmp");

@@ -7,7 +7,8 @@
 typedef struct
 {
     SDL_Texture* board;
-    SDL_Texture* cell[2];
+    SDL_Texture* cell;
+    SDL_Texture* cellSelect;
     SDL_Texture* bomb;
     SDL_Texture* redBomb;
     SDL_Texture* flag;
