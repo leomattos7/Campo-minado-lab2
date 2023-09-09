@@ -21,192 +21,40 @@ void initBoard(Board** board, int size)
 
 void initGame(Game* game)
 {
-	if(game->restartGame != 1)
+	if (game->restartGame != 1)
+	{
 		game->size = 12;
+	}
 	game->reallocUp = 0;
-	game->menu = 1;
 	game->running = 1;
-	game->gameMode = 0;
 	game->restartGame = 0;
+	game->gameMode = 0;
 	game->gameOver = 0;
 	game->gameStart = 0;
 	game->nOfBombs = 0;
 	game->openCells = 0;
 }
 
-
-static int searchFlag(Game* game, Board** board, int i, int j)
+void updateBot(Game* game, SDL_Renderer* renderer, const Textures* textures, Board** board)
 {
-	int newRow, newCol;
-	int qtdFlags = 0;
-	for (int linha = -1; linha < 2; linha++)	
-	{
-		for (int coluna = -1; coluna < 2; coluna++)
-		{
-			newRow = i + linha;
-			newCol = j + coluna;
-			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isFlag != 0)
-			{
-				qtdFlags++;
-			}
-		}
-	}
-	std::cout << i << " " << j << " " << qtdFlags << std::endl;
-	return qtdFlags;
-}
-
-static int searchFreeCell(Game* game, Board** board, int i, int j)
-{
-	int newRow, newCol;
-	for (int linha = -1; linha < 2; linha++)
-	{
-		for (int coluna = -1; coluna < 2; coluna++)
-		{
-			newRow = i + linha;
-			newCol = j + coluna;
-
-			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isOpen == 0)
-			{
-				if (board[newRow][newCol].isFlag == 0)
-				{
-					playCell(board, game, newRow, newCol, 1);
-					board[newRow][newCol].selected = 1;
-					return 1;
-				}
-			}
-		}
-	}
-	return 0;
-}
-
-
-static int playBot(Game* game, Board** board)
-{
-	int play = 0;
+	int posIniX = POS_INI_X - (game->size * (CELL_SIZE / 2));
+	int posIniY = POS_INI_Y - (game->size * (CELL_SIZE / 2));
+	
 	for (int i = 0; i < game->size; i++)
 	{
 		for (int j = 0; j < game->size; j++)
 		{
-			if (board[i][j].isOpen == 1)
+			int posX = posIniX + (i * CELL_SIZE);
+			int posY = posIniY + (j * CELL_SIZE);
+			if (board[i][j].selected == 1)
 			{
-				int flagsAround = searchFlag(game, board, i, j);
-				if (flagsAround == board[i][j].nearbyBombs)
-				{
-					play = searchFreeCell(game, board, i, j);
-				}
-			}
-			if (play == 1)
-				return 1;
-		}
-	}
-	return 0;
-}
-
-static void randomCell(list<CellBot>& cells, Board** board, Game* game)
-{
-	if (cells.empty())
-	{
-		return;
-	}
-	srand(static_cast<unsigned>(time(nullptr)));
-	int randomIndex = rand() % cells.size();
-	auto it = cells.begin();
-	advance(it, randomIndex);
-	board[it->row][it->col].selected = 1;
-	playCell(board, game, it->row, it->col, 1);
-}
-
-static void randomPlay(Board** board, Game* game)
-{
-	int newRow, newCol;
-	list<CellBot> cells;
-	for (int i = 0; i < game->size; i++)
-	{
-		for (int j = 0; j < game->size; j++)
-		{
-			if (board[i][j].isOpen == 0 && board[i][j].isFlag == 0)
-			{
-				cells.push_front({ i, j });
+				setBack(posX, posY, renderer, textures->cellSelect);
+				if(board[i][j].isFlag != 0 || board[i][j].isBomb == 0)
+					board[i][j].selected = 0;
+				SDL_RenderPresent(renderer);
+				SDL_Delay(800);
 			}
 		}
-	}
-	randomCell(cells, board, game);
-}
-
-
-static int countClosedCells(Board** board, int size, int i, int j)
-{
-	int closedCount = 0, newRow, newCol;
-	for (int linha = -1; linha < 2; linha++)
-	{
-		for (int coluna = -1; coluna < 2; coluna++)
-		{
-			newRow = i + linha;
-			newCol = j + coluna;
-			if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size && board[newRow][newCol].isOpen == 0)
-			{
-				if (board[newRow][newCol].isFlag == 0)
-					closedCount++;
-			}
-		}
-	}
-	return closedCount;
-}
-
-static void setFlag(Board** board, Game* game, int i, int j)
-{
-	int newRow, newCol;
-	for (int linha = -1; linha < 2; linha++)
-	{
-		for (int coluna = -1; coluna < 2; coluna++)
-		{
-			newRow = i + linha;
-			newCol = j + coluna;
-			if (newRow >= 0 && newRow < game->size && newCol >= 0 && newCol < game->size && board[newRow][newCol].isOpen == 0)
-			{
-				if (board[newRow][newCol].isFlag == 0)
-				{
-					playCell(board, game, newRow, newCol, 3);
-					board[newRow][newCol].selected = 1;
-					return;
-				}
-			}
-		}
-	}
-}
-
-static int searchPossibleBombs(Board** board, Game* game)
-{
-	for (int i = 0; i < game->size; i++)
-	{
-		for (int j = 0; j < game->size; j++)
-		{
-			if (board[i][j].isOpen == 1 && board[i][j].nearbyBombs > 0)
-			{
-				if (board[i][j].nearbyBombs == countClosedCells(board, game->size, i, j))
-				{
-					setFlag(board, game, i, j);
-					return 1;
-				}
-			}
-		}
-	}
-	return 0;
-}
-
-static void playing(Board** board, Game* game)
-{
-	if (playBot(game, board))
-	{
-		return;
-	}
-	else if (searchPossibleBombs(board, game))
-	{
-		return;
-	}
-	else
-	{
-		randomPlay(board, game);
 	}
 }
 
@@ -247,6 +95,10 @@ void update(Game* game, SDL_Renderer* renderer, Textures* textures, Board** boar
 	setBoard(game->size, renderer, textures, board);
 	setNumbers(game->size, renderer, textures, board);
 	SDL_RenderPresent(renderer);
+	if (game->gameOver == 1 && game->gameMode == 1)
+	{
+		initGame(game);
+	}
 }
 
 void setInitialTextures(SDL_Renderer* renderer, Textures* textures, Items items)
@@ -301,27 +153,30 @@ static void getPos(int posX, int posY, int qtdCelulas, int* linha, int* coluna, 
 			}
 }
 
-static void revelaCelulas(int linha, int coluna, Board** tabuleiro, int qtdCelulas)
+static void revealCells(int row, int col, Board** tabuleiro, int qtdCelulas)
 {
-	if (linha < 0 || linha >= qtdCelulas || coluna < 0 || coluna >= qtdCelulas ||
-		tabuleiro[linha][coluna].isOpen || tabuleiro[linha][coluna].isFlag)
-		return;
-
-	else if (tabuleiro[linha][coluna].isBomb)
-		return;
-	
-	else if (tabuleiro[linha][coluna].nearbyBombs > 0)
+	if (row < 0 || row >= qtdCelulas || col < 0 || col >= qtdCelulas)
 	{
-		tabuleiro[linha][coluna].isOpen = 1;
+		return;
+	} 
+	else if (tabuleiro[row][col].isOpen || tabuleiro[row][col].isFlag)
+	{
 		return;
 	}
-
-	tabuleiro[linha][coluna].isOpen = 1;
-
-	revelaCelulas(linha - 1, coluna, tabuleiro, qtdCelulas); 
-	revelaCelulas(linha + 1, coluna, tabuleiro, qtdCelulas); 
-	revelaCelulas(linha, coluna - 1, tabuleiro, qtdCelulas); 
-	revelaCelulas(linha, coluna + 1, tabuleiro, qtdCelulas); 
+	else if (tabuleiro[row][col].isBomb)
+	{
+		return;
+	}
+	else if (tabuleiro[row][col].nearbyBombs > 0)
+	{
+		tabuleiro[row][col].isOpen = 1;
+		return;
+	}
+	tabuleiro[row][col].isOpen = 1;
+	revealCells(row - 1, col, tabuleiro, qtdCelulas); 
+	revealCells(row + 1, col, tabuleiro, qtdCelulas); 
+	revealCells(row, col - 1, tabuleiro, qtdCelulas); 
+	revealCells(row, col + 1, tabuleiro, qtdCelulas); 
 }
 
 
@@ -364,6 +219,7 @@ static int clickItem(int posX, int posY, int itemPosX, int itemPosY)
 
 void playCell(Board** board, Game* game, int row, int col, int button)
 {
+	board[row][col].selected = 1;
 	if (button == 1)
 	{
 		if (!board[row][col].isBomb)
@@ -373,8 +229,7 @@ void playCell(Board** board, Game* game, int row, int col, int button)
 				game->gameStart = 1;
 				randomlyBombs(game->size, board, row, col);
 			}
-			revelaCelulas(row, col, board, game->size);
-			board[row][col].selected = 0;
+			revealCells(row, col, board, game->size);
 		}
 		else
 		{
@@ -385,14 +240,15 @@ void playCell(Board** board, Game* game, int row, int col, int button)
 	else if (button == 3)
 	{
 		board[row][col].isFlag = ~board[row][col].isFlag;
-		board[row][col].selected = 0;
 	}
+	if (game->gameMode == 0 && game->gameOver == 0)
+		board[row][col].selected = 0;
 }
 
 void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8 button)
 {
 	int row, col;
-	if (pertence(posX, posY, game->size) && game->gameOver == 0)
+	if (pertence(posX, posY, game->size) && game->gameOver == 0 && game->gameMode == 0)
 	{
 		getPos(posX, posY, game->size, &row, &col, board);
 		if (!board[row][col].isOpen)
@@ -408,9 +264,11 @@ void mouseClick(int posX, int posY, Game* game, Board** board, Items item, Uint8
 	{
 		game->restartGame = 1;
 	}
-	else
+	else if(clickItem(posX, posY, item.roboPositionX, item.roboPositionY))
 	{
-		playing(board, game);
-		this_thread::sleep_for(chrono::milliseconds(1000));
+		if (game->gameMode == 0)
+			game->gameMode = 1;
+		else
+			initGame(game);
 	}	
 }

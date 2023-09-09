@@ -43,6 +43,7 @@ void setAditionalItems(SDL_Renderer* renderer, Textures* texture, Items items)
 {
 	setBack(items.plusPositionX, items.plusPositionY, renderer, texture->plus);
 	setBack(items.restartPositionX, items.restartPositionY, renderer, texture->restart);
+	setBack(items.roboPositionX, items.roboPositionY, renderer, texture->robo);
 }
 
 void aditionalItemsPos(Items* items)
@@ -51,6 +52,8 @@ void aditionalItemsPos(Items* items)
 	items->plusPositionY = 30;
 	items->restartPositionX = 385;
 	items->restartPositionY = 30;
+	items->roboPositionX = 120;
+	items->roboPositionY = 30;
 }
 
 void setBoard(int numbOfCells, SDL_Renderer* renderer, const Textures* textures, Board** board)
@@ -79,7 +82,7 @@ void setBoard(int numbOfCells, SDL_Renderer* renderer, const Textures* textures,
 				if(board[i][j].isBomb)
 					texture = board[i][j].selected ? textures->redBomb : textures->bomb;
 				else
-					texture = board[i][j].selected ? textures->cellSelect : textures->openCell;
+					texture = textures->openCell;
 			}
 			setBack(posX, posY, renderer, texture);
 		}

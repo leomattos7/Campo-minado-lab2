@@ -28,13 +28,9 @@ typedef struct
 	int gameMode;
 }Game;
 
-typedef struct
-{
-	int row;
-	int col;
-}CellBot;
-
 void initGame(Game* game);
+
+void updateBot(Game* game, SDL_Renderer* renderer, const Textures* textures, Board** board);
 
 void setInitialTextures(SDL_Renderer* renderer, Textures* textures, Items items);
 

@@ -23,7 +23,9 @@ void loadTextures(SDL_Renderer* renderer, Textures& textures)
     textures.numbers[2] = loadTexture(renderer, "./resources/two.bmp");
     textures.numbers[3] = loadTexture(renderer, "./resources/three.bmp");
     textures.numbers[4] = loadTexture(renderer, "./resources/four.bmp");
+    textures.numbers[5] = loadTexture(renderer, "./resources/five.bmp");
 
+    textures.robo = loadTexture(renderer, "./resources/robo.bmp");
     textures.plus = loadTexture(renderer, "./resources/plus.bmp");
 
     textures.player = loadTexture(renderer, "./resources/player.bmp");

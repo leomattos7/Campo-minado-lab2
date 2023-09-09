@@ -31,6 +31,9 @@ typedef struct
 
     int restartPositionX;
     int restartPositionY;
+
+    int roboPositionX;
+    int roboPositionY;
 }Items;
 
 Board** memoryAlloc(int size);

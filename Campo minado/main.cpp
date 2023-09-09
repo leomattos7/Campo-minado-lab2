@@ -2,6 +2,7 @@
 #include "imagens.h"
 #include "tabuleiro.h"
 #include "game.h"
+#include "botDecisions.h"
 
 int main(int argc, char* argv[])
 {
@@ -27,9 +28,10 @@ int main(int argc, char* argv[])
                 events(event, &game, board, items);
             }
         }
-        else
+        else if (game.gameOver == 0)
         {
-            //
+            playing(board, &game);
+            updateBot(&game, renderer, &textures, board);
         }
         if (game.reallocUp)
         {

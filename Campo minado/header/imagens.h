@@ -14,8 +14,9 @@ typedef struct
     SDL_Texture* flag;
     SDL_Texture* openCell;
     SDL_Texture* score;
-    SDL_Texture* numbers[5];
+    SDL_Texture* numbers[6];
 
+    SDL_Texture* robo;
     SDL_Texture* plus;
 
     SDL_Texture* player;
